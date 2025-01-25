@@ -1,0 +1,525 @@
+nav.navbar .navbar-brand .logo img {
+    width: auto;
+    height: 64px;
+}
+
+
+#nav-drawer.closed:not(:hover) {
+    opacity: 1;
+}
+
+.my-loginwrapper {
+    background-color: white;
+}
+
+.my-coverwrapper {
+    background-color: $color-secondary;
+}
+
+#my-custom-footer-wrapper {
+    background-color: $color-terciary;
+}
+
+#my-custom-footer-wrapper footer {
+    padding-top: 10px;
+    line-height: 20px;
+    padding-left: 10%;
+}
+
+#my-custom-footer-wrapper .my-credits-panel {
+    line-height: 90%;
+    font-size: 93%;
+    margin-top: 30px;
+    margin-right: 30px;
+}
+
+#my-loginspecialtext {
+    font-size: 176%;
+    line-height: 108%;
+    padding-top: 3vh;
+}
+
+.userpicture {
+    border-radius: 27%;
+}
+
+.my-logos {
+    width: 100%;
+    height: auto;
+}
+
+h1,
+.h1 {
+    font-size: 36px;
+    color: $my-oscuro;
+    font-weight: 700;
+}
+
+h2,
+.h2 {
+    font-size: 30px;
+    color: $my-negro;
+    font-weight: 700;
+}
+
+h3,
+.h3 {
+    font-size: 24px;
+    color: $my-negro;
+    font-weight: 700px;
+}
+
+h4,
+.h4 {
+    font-size: 20px;
+    color: $my-negro;
+    font-weight: 600px;
+}
+
+.my-fullwidthloginstyle {
+    background-color: white;
+}
+
+.alert-success {
+    color: black;
+    background-color: $green;
+    border: 1px solid $green;
+}
+
+#page-login-index.moove-login .my-fullwidthloginstyle .loginpanel .card-block .form .welcome {
+    font-weight: bold;
+    color: $color-primary;
+}
+
+#page-login-index #my-custom-footer-wrapper {
+    background-color: $color-secondary;
+    font-size: 15px;
+}
+.my-credit-footer-wrapper{
+    background-color: $my-blue3;
+    font-size: 15px;
+}
+
+#page-login-index #my-credit:not(:hover) {
+    opacity: 0.97;
+}
+
+#top-footer {
+    background-color: $color-secondary;
+    color: white;
+    margin:0 -15px;
+}
+
+#nav-drawer {
+    background-color: $my-blue;
+    padding: 0;
+}
+
+.login-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#nav-drawer .list-group .list-group-item a {
+    /* text-transform: uppercase; */
+    font-size: 105%;
+    /* font-weight: bold; */
+    line-height: auto;
+}
+
+
+
+.dropdown-item:active,
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:focus-within {
+    background-color: $color-secondary;
+}
+
+nav.navbar ul.navbar-nav .lang-menu .nav-link:hover {
+    color: $color-primary;
+}
+
+#page-content #region-main-box #region-main>.card {
+    border-top: 3px solid lightgray;
+}
+
+#page-header>div>.card {
+    border-top: 3px solid $color-secondary;
+}
+
+#page-login-index.moove-login .loginpanel .card-block .form #loginbtn,
+.my-custom-btn {
+    border-radius: 8px;
+    background-color: $my-amarillo !important;
+    color: $my-negro !important;
+    text-transform: uppercase;
+    font-size: 116%;
+    font-weight: 700;
+    border: 1px solid rgba(10, 10, 10, .2);
+}
+
+#page-login-index.moove-login .loginpanel .card-block .form #loginbtn:hover,
+#page-login-index.moove-login .loginpanel .card-block .form #loginbtn:focus,
+.my-custom-btn:hover,
+.my-custom-btn:focus {
+    background-color: $my-blue !important;
+    color: white !important;
+}
+
+a.my-credit-link:not(:hover) {
+    color: white;
+}
+
+
+#page-login-index .my-fullwidthloginstyle+#my-custom-footer-wrapper {
+    background-color: $my-negro;
+}
+
+#page-login-index.moove-login.compecer-co #page-wrapper #page {
+    background-image: none;
+}
+
+#page-login-index.moove-login.compecer-co .my-fullwidthloginstyle #my-loginbg_image-image {
+    min-width: calc(100vh - 196px);
+}
+
+#page-my-index .admininfos {
+    margin-top: 25px;
+}
+
+.pagelayout-mypublic #region-main,
+.pagelayout-mydashboard #region-main,
+.pagelayout-frontpage #region-main,
+.pagelayout-standard #region-main,
+.pagelayout-admin #region-main,
+.pagelayout-course #region-main,
+.pagelayout-incourse #region-main,
+.pagelayout-report #region-main {
+    padding-right: 15px;
+}
+
+.breadcrumb-button .singlebutton {
+    margin-bottom: 25px;
+}
+
+body.compecer-co,
+#page-my-index.compecer-co {
+    background-color: $body-bg;
+}
+
+#page-my-index.compecer-co #region-main-box #region-main .card:not([class*="dashboard-card"]) {
+    border-top: solid 3px $my-blue;
+}
+
+a {
+    color: $my-blue;
+}
+
+body.coursepresentation-cover .headerbkg {
+    margin-top: 79px;
+}
+
+body.compecer-co {
+    #loginbtn .btn-primary {
+        color: #fff;
+        width: 240px;
+        height: 43px;
+        background: $my-blue2;
+        font-size: 20px;
+        border-radius: 20px !important;
+    }
+    #loginbtn .btn-primary:hover {
+        color: #fff;
+        width: 240px;
+        height: 43px;
+        background: $my-blue2;
+        font-size: 20px;
+        border-radius: 20px !important;
+    }
+    #loginbtn .btn-secondary {
+        color: #fff;
+        width: 240px;
+        height: 43px;
+        background: $my-blue;
+        font-size: 20px;
+        border-radius: 20px !important;
+    }
+    #loginbtn .btn-secondary:hover {
+        color: #fff;
+        width: 240px;
+        height: 43px;
+        background: $my-blue;
+        font-size: 20px;
+        border-radius: 20px !important;
+    }
+
+    #page-footer {
+        background-color: $my-dark;
+        color: #fff;
+    }
+
+    #top-footer {
+        background-color: white;
+        margin-top: 70px;
+    }
+
+    #nav-drawer-footer:not(:hover) {
+        background-color: $my-blue2;
+    }
+
+    #nav-drawer.closed .list-group .list-group-item:hover>ul {
+        background-color: $my-blue2;
+    }
+
+    #nav-drawer.closed .list-group .list-group-item ul li.list-group-item:hover {
+        background: transparent;
+    }
+
+    #nav-drawer.closed .list-group .list-group-item ul li.list-group-item:hover>a {
+        color: white;
+        background: transparent;
+    }
+
+    #top-footer .contact ul li,
+    #top-footer .contact ul li * {
+        color: $my-oscuro;
+    }
+
+    #nav-drawer .list-group .list-group-item:hover,
+    #nav-drawer.closed .list-group .list-group-item:hover {
+        background-color: $color-secondary;
+    }
+
+    #nav-drawer .list-group+.list-group {
+        border-color: rgba(10, 10, 10, 0.4);
+    }
+
+    #nav-drawer .metismenu>li ul.collapse.in {
+        margin-left: -.4rem;
+    }
+
+    #nav-drawer .metismenu>li:hover ul.collapse.in {
+        background: $color-primary-dark;
+    }
+
+    .usermenu a.dropdown-toggle {
+        color: $my-negro;
+    }
+
+
+    #sidepreopen-control {
+        background-color: $my-blue;
+    }
+
+    nav.navbar ul.navbar-nav .nav-link i:before {
+        font-size: 1.4rem;
+    }
+
+    img.userpicture {
+        border: 2px solid $my-negro;
+    }
+
+    .btn.btn-primary:hover {
+        color: white;
+        background-color: $color-primary;
+        border-color: $color-primary;
+    }
+
+    .btn-secondary,
+    .btn-default {
+        color: white;
+        background-color: $my-blue;
+        border-color: $my-blue;
+        text-shadow: none;
+        font-weight: 500;
+    }
+    body#page-login-index a {
+        color: $my-gris;
+    }
+    body#page-login-index a:hover {
+        color: $my-gris2;
+    }
+
+    .btn:hover {
+        color: white;
+        text-decoration: none;
+        background-color: $my-blue2;
+        border-color: $my-blue2;
+    }
+
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #fff;
+        background-color: $color-primary;
+        border-color: $color-primary;
+    }
+
+    h1,
+    .h1,
+    h2,
+    .h2,
+    h3,
+    .h3,
+    h4,
+    .h4,
+    h5,
+    .h5,
+    h6,
+    .h6 {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        /* color: $my-negro; */
+    }
+
+    h1,
+    .h1 {
+        font-weight: 700;
+        font-size: 36px;
+        /* color: $my-blue; */
+    }
+
+    h2,
+    .h2 {
+        font-weight: 700;
+        font-size: 30px;
+        /* color: $my-amarillo; */
+    }
+
+    h3,
+    .h3 {
+        font-weight: 700;
+        font-size: 24px;
+        /* color: $my-negro; */
+    }
+
+    h4,
+    .h4,
+    h5,
+    .h5,
+    h6,
+    .h6 {
+        color: $my-negro;
+    }
+
+    #nav-drawer .list-group .list-group-item a {
+        color: white;
+    }
+
+    #nav-drawer .list-group .list-group-item:hover>a {
+        color: white;
+    }
+
+    nav.navbar .drawer-toggle .nav-link:hover {
+        background-color: transparent;
+    }
+
+    .drawer-toggle button.nav-link>i.slicon-menu {
+        color: $my-negro;
+        font-size: 156%;
+    }
+
+    .drawer-toggle button.nav-link:hover>i.slicon-menu {
+        color: $color-primary;
+    }
+}
+
+.my-fullwidthloginstyle {
+    .my-customloginbox-wrapper {
+        padding-bottom: 40px;
+    }
+
+    #page-login-index.moove-login .loginpanel .card-block .form {
+        height: auto;
+        max-height: none;
+    }
+
+    #my-loginwrapper-inner {
+        max-width: 440px;
+        margin: 0 auto !important;
+    }
+
+    #my-loginbg_image-image {
+        width: 100%;
+        object-fit: contain;
+        max-height: 100vh;
+        max-width: 900px
+    }
+
+    .my-loginbg_image-container {
+        max-height: 768px;
+        max-height: 100vh;
+        margin: 10% auto;
+        padding: 0px 5%;
+        height: 80%;
+    }
+
+    .my-cookies-notice i.slicon-question {
+        color: white !important;
+        background-color: $color-primary !important;
+        padding: 5px !important;
+        border-radius: 5px !important;
+    }
+
+    .my-loginbox-wrapper .input-group {
+        border-radius: 0px;
+        overflow: hidden;
+        border: 1px solid $my-gris;
+        margin-bottom: 10px;
+        background: white none !important;
+    }
+
+    .my-coverwrapper {
+        background: #fff;
+        background: -moz-linear-gradient(110deg, white 52%, #f9b214 52%);
+        background: -webkit-linear-gradient(110deg, white 52%, #f9b214 53%);
+        background: linear-gradient(110deg, white 52%, #f9b214 52%);
+        filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#f9b214", GradientType=1);
+    }
+
+    .my-loginbox-wrapper .forgetpass {
+        padding-top: 10px;
+    }
+}
+
+.dashboard-card .dashboard-card-img .course-category{
+    background-color: $my-rojo;
+}
+
+.dashboard-card{
+    border: 0.5px solid $my-blue3;
+}
+.pagelayout-mydashboard .card{
+    border-radius: 0;
+}
+
+@media (min-width: 992px) {
+    #page-login-index a.my-credit-link {
+        white-space: pre-line;
+        display: inline-block;
+    }
+
+}
+
+@media (min-width: 1200px) {
+    #page-login-index.moove-login .my-fullwidthloginstyle .loginpanel .card-block .form .welcome {
+        margin-top: 25px;
+    }
+
+}
+
+@media (min-width: 1200px) and (min-height: 748px) {
+    #my-custom-footer-wrapper {
+        border: none !important;
+        min-height: $my-loginfooterheight;
+    }
+
+    .my-fullwidthloginstyle>div {
+        min-height: 748px;
+        min-height: calc(100vh - #{$my-loginfooterheight});
+    }
+
+}
