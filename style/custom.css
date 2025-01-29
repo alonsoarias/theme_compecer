@@ -523,3 +523,344 @@ body.compecer-co {
     }
 
 }
+
+// Keyframes para animaciones
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(1.02);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInBlur {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(0);
+    }
+}
+
+// Estilos del breadcrumb
+.breadcrumb-header {
+    position: relative;
+    padding: 100px 0 50px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: -32px -32px 32px;
+    animation: fadeInBlur 0.8s ease-out forwards;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)); // Gradiente más sutil
+        animation: fadeInScale 0.6s ease-out forwards;
+    }
+
+    .container {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .breadcrumb-inner {
+        text-align: center;
+
+        h2 {
+            color: #fff !important; // Forzar color blanco
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0 0 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); // Sombra más pronunciada
+            animation: slideInFromBottom 0.6s ease-out forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+            line-height: 1.2;
+        }
+
+        .description {
+            color: #fff !important; // Forzar color blanco
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); // Sombra más pronunciada
+            animation: slideInFromBottom 0.6s ease-out forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        // Asegurar que todos los textos dentro sean blancos
+        * {
+            color: #fff !important;
+        }
+    }
+
+    .header-navigation {
+        margin-top: 15px;
+        animation: slideInFromBottom 0.6s ease-out forwards;
+        animation-delay: 0.4s;
+        opacity: 0;
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+
+            .breadcrumb-item {
+                color: #fff !important; // Forzar color blanco
+                font-size: 0.95rem;
+                display: flex;
+                align-items: center;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); // Sombra para legibilidad
+
+                &.active {
+                    color: #fff !important;
+                    font-weight: 500;
+                }
+
+                + .breadcrumb-item {
+                    padding-left: 0.8rem;
+
+                    &::before {
+                        content: "/";
+                        display: inline-block;
+                        padding-right: 0.8rem;
+                        color: rgba(255, 255, 255, 0.9) !important;
+                        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+                    }
+                }
+
+                a {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                    text-decoration: none;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+
+                    &:hover {
+                        color: #fff !important;
+                        transform: translateY(-1px);
+                    }
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: -2px;
+                        left: 0;
+                        width: 100%;
+                        height: 1px;
+                        background: #fff;
+                        transform: scaleX(0);
+                        transition: transform 0.3s ease;
+                    }
+
+                    &:hover::after {
+                        transform: scaleX(1);
+                    }
+                }
+            }
+        }
+    }
+
+    .header-actions-container {
+        margin-top: 20px;
+        animation: slideInFromBottom 0.6s ease-out forwards;
+        animation-delay: 0.5s;
+        opacity: 0;
+
+        .header-action {
+            display: inline-block;
+            margin: 0 5px;
+
+            .btn {
+                background: rgba(255, 255, 255, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: #fff !important;
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                font-size: 0.9rem;
+                line-height: 1.5;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.3);
+                    border-color: rgba(255, 255, 255, 0.4);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                &:active {
+                    transform: translateY(-1px);
+                }
+            }
+        }
+    }
+}
+
+// Estilos para cuando no hay imagen de curso
+.no-courseimage {
+    .breadcrumb-header {
+        background-color: #f8f9fa;
+        padding: 30px 0;
+
+        &::before {
+            display: none;
+        }
+
+        .breadcrumb-inner {
+            * {
+                color: #333 !important;
+                text-shadow: none;
+            }
+
+            h2 {
+                color: #333 !important;
+            }
+
+            .description {
+                color: #666 !important;
+            }
+        }
+
+        .header-navigation .breadcrumb {
+            .breadcrumb-item {
+                color: #666 !important;
+                text-shadow: none;
+
+                &.active {
+                    color: #333 !important;
+                }
+
+                + .breadcrumb-item::before {
+                    color: #999 !important;
+                    text-shadow: none;
+                }
+
+                a {
+                    color: #666 !important;
+                    text-shadow: none;
+
+                    &:hover {
+                        color: #333 !important;
+                    }
+
+                    &::after {
+                        background: #333;
+                    }
+                }
+            }
+        }
+
+        .header-actions-container .header-action .btn {
+            background: #f1f1f1;
+            color: #333 !important;
+            border-color: #ddd;
+            text-shadow: none;
+
+            &:hover {
+                background: #e9e9e9;
+                border-color: #ccc;
+            }
+        }
+    }
+}
+
+// Media queries para responsividad
+@media (max-width: 1200px) {
+    .breadcrumb-header {
+        margin: -24px -24px 24px;
+    }
+}
+
+@media (max-width: 992px) {
+    .breadcrumb-header {
+        padding: 80px 0 40px;
+
+        .breadcrumb-inner h2 {
+            font-size: 2.2rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .breadcrumb-header {
+        padding: 60px 0 30px;
+        margin: -16px -16px 16px;
+
+        .breadcrumb-inner {
+            h2 {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 1rem;
+            }
+        }
+
+        .header-navigation .breadcrumb .breadcrumb-item {
+            font-size: 0.9rem;
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .breadcrumb-header {
+        padding: 40px 0 20px;
+
+        .breadcrumb-inner {
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .description {
+                font-size: 0.9rem;
+            }
+        }
+
+        .header-navigation .breadcrumb {
+            font-size: 0.85rem;
+        }
+    }
+}
+
+// Ajustes para el contenedor principal
+#page-header {
+    padding: 0;
+    
+    &.moove-container-fluid {
+        max-width: none;
+        padding: 0;
+    }
+}
