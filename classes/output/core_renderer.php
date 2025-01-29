@@ -140,17 +140,52 @@ class core_renderer extends \theme_moove\output\core_renderer
      *
      * @return string HTML for header
      */
-    public function full_header()
-    {
-        global $CFG, $USER;
-
+    public function full_header() {
+        global $CFG, $USER, $PAGE;
+    
         if ($USER->id != 2) {
             $CFG->perfdebug = 0;
         }
-
+    
         $theme = theme_config::load('compecer');
         $output = '';
-
+    
+        // Si NO estamos en un curso (o estamos en la página principal), mostramos las notificaciones en el header
+        if ($PAGE->pagelayout !== 'course' || $PAGE->course->id == 1) {
+            if (!empty(trim($theme->settings->generalnotice))) {
+                if ($theme->settings->generalnoticemode == 'info') {
+                    $output .= '<div class="alert alert-info mt-4"><strong><i class="fa fa-info-circle"></i></strong> ' . $theme->settings->generalnotice . '</div>';
+                }
+                if ($theme->settings->generalnoticemode == 'danger') {
+                    $output .= '<div class="alert alert-danger mt-4"><strong><i class="fa fa-warning"></i></strong> ' . $theme->settings->generalnotice . '</div>';
+                }
+            }
+    
+            if (is_siteadmin() && $theme->settings->generalnoticemode == 'off') {
+                $output .= '<div class="alert mt-4"><a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer"><strong><i class="fa fa-edit"></i></strong> ' . get_string('generalnotice_create', 'theme_compecer') . '</a></div>';
+            }
+        }
+    
+        $output .= parent::full_header();
+        return $output;
+    }
+    
+    /**
+     * Renders general notices for course pages.
+     *
+     * @return string HTML for notices
+     */
+    public function render_course_notices() {
+        global $CFG, $PAGE;
+        
+        // Solo renderizamos para páginas de curso
+        if ($PAGE->pagelayout !== 'course' || $PAGE->course->id == 1) {
+            return '';
+        }
+    
+        $theme = theme_config::load('compecer');
+        $output = '';
+    
         if (!empty(trim($theme->settings->generalnotice))) {
             if ($theme->settings->generalnoticemode == 'info') {
                 $output .= '<div class="alert alert-info mt-4"><strong><i class="fa fa-info-circle"></i></strong> ' . $theme->settings->generalnotice . '</div>';
@@ -159,12 +194,11 @@ class core_renderer extends \theme_moove\output\core_renderer
                 $output .= '<div class="alert alert-danger mt-4"><strong><i class="fa fa-warning"></i></strong> ' . $theme->settings->generalnotice . '</div>';
             }
         }
-
+    
         if (is_siteadmin() && $theme->settings->generalnoticemode == 'off') {
             $output .= '<div class="alert mt-4"><a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer"><strong><i class="fa fa-edit"></i></strong> ' . get_string('generalnotice_create', 'theme_compecer') . '</a></div>';
         }
-
-        $output .= parent::full_header();
+    
         return $output;
     }
 
