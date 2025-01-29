@@ -1,39 +1,13 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * Theme settings file.
- *
- * @package    theme_compecer
- * @copyright  2024 IngeWeb https://www.ingeweb.co
- * @author     Pedro Arias <soporte@ingeweb.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-require(__DIR__ . '/../moove/settings.php');
 require_once(__DIR__ . '/classes/admin_settingspage_tabs.php');
 
 if ($ADMIN->fulltree) {
-    $tabs = $settings->get_tabs();
     $settings = new theme_compecer_admin_settingspage_tabs('themesettingcompecer', get_string('configtitle', 'theme_compecer'));
-    $settings->set_tabs($tabs);
 
-    $page = new admin_settingpage('theme_compecer', get_string('themesettings', 'theme_compecer'));
+    // General Settings Tab
+    $page = new admin_settingpage('theme_compecer_general', get_string('generalsettings', 'theme_compecer'));
 
     // Dynamic strings
     $a = new stdClass;
@@ -49,13 +23,6 @@ if ($ADMIN->fulltree) {
     $description = get_string('themeinfotext', 'theme_compecer', $a);
     $setting = new admin_setting_heading($name, $title, $description);
     $page->add($setting);
-
-    // SECTION: General Settings
-    $page->add(new admin_setting_heading(
-        'theme_compecer_general',
-        get_string('themesettingsgeneral', 'theme_compecer'),
-        get_string('themesettingsgeneraldesc', 'theme_compecer')
-    ));
 
     // Notice Settings
     $name = 'theme_compecer/generalnoticemode';
@@ -79,12 +46,134 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // SECTION: Chat Integration
-    $page->add(new admin_setting_heading(
-        'theme_compecer_chat',
-        get_string('themesettingschat', 'theme_compecer'),
-        get_string('themesettingschatdesc', 'theme_compecer')
-    ));
+    $settings->add_tab($page);
+
+    // Slider Settings Tab
+    $page = new admin_settingpage('theme_compecer_slider', get_string('slidersettings', 'theme_compecer'));
+
+    $name = 'theme_compecer/slidercount';
+    $title = get_string('slidercount', 'theme_compecer');
+    $description = get_string('slidercountdesc', 'theme_compecer');
+    $default = 1;
+    $choices = array(
+        1 => '1',
+        2 => '2',
+        3 => '3'
+    );
+    $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $page->add($setting);
+
+    for ($i = 1; $i <= 3; $i++) {
+        // Slider image
+        $name = "theme_compecer/sliderimage{$i}";
+        $title = get_string('sliderimage', 'theme_compecer', $i);
+        $description = get_string('sliderimagedesc', 'theme_compecer');
+        $opts = array('subdirs' => 0, 'accepted_types' => array('web_image'));
+        $setting = new admin_setting_configstoredfile($name, $title, $description, "sliderimage{$i}", 0, $opts);
+        $page->add($setting);
+
+        // Slider title
+        $name = "theme_compecer/slidertitle{$i}";
+        $title = get_string('slidertitle', 'theme_compecer', $i);
+        $description = get_string('slidertitledesc', 'theme_compecer');
+        $default = '';
+        $setting = new admin_setting_configtext($name, $title, $description, $default);
+        $page->add($setting);
+
+        // Slider caption
+        $name = "theme_compecer/slidercaption{$i}";
+        $title = get_string('slidercaption', 'theme_compecer', $i);
+        $description = get_string('slidercaptiondesc', 'theme_compecer');
+        $default = '';
+        $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+        $page->add($setting);
+    }
+
+    $settings->add_tab($page);
+
+    // About Settings Tab
+    $page = new admin_settingpage('theme_compecer_about', get_string('aboutsettings', 'theme_compecer'));
+
+    $name = 'theme_compecer/abouttitle';
+    $title = get_string('abouttitle', 'theme_compecer');
+    $description = get_string('abouttitledesc', 'theme_compecer');
+    $default = get_string('abouttitledefault', 'theme_compecer');
+    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $page->add($setting);
+
+    $name = 'theme_compecer/aboutcontent';
+    $title = get_string('aboutcontent', 'theme_compecer');
+    $description = get_string('aboutcontentdesc', 'theme_compecer');
+    $default = get_string('aboutcontentdefault', 'theme_compecer');
+    $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+    $page->add($setting);
+
+    $settings->add_tab($page);
+
+    // Career Settings Tab
+    $page = new admin_settingpage('theme_compecer_career', get_string('careersettings', 'theme_compecer'));
+
+    $name = 'theme_compecer/enablecareerboxes';
+    $title = get_string('enablecareerboxes', 'theme_compecer');
+    $description = get_string('enablecareerboxesdesc', 'theme_compecer');
+    $default = 1;
+    $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+    $page->add($setting);
+
+    // Array de iconos disponibles
+    $icons = [
+        'graduation-cap' => get_string('icon_graduation', 'theme_compecer'),
+        'book' => get_string('icon_book', 'theme_compecer'),
+        'laptop' => get_string('icon_laptop', 'theme_compecer'),
+        'users' => get_string('icon_users', 'theme_compecer'),
+        'globe' => get_string('icon_globe', 'theme_compecer'),
+        'lightbulb' => get_string('icon_lightbulb', 'theme_compecer'),
+        'chart-line' => get_string('icon_chart', 'theme_compecer'),
+        'medal' => get_string('icon_medal', 'theme_compecer'),
+        'certificate' => get_string('icon_certificate', 'theme_compecer'),
+        'star' => get_string('icon_star', 'theme_compecer'),
+        'rocket' => get_string('icon_rocket', 'theme_compecer'),
+        'code' => get_string('icon_code', 'theme_compecer'),
+        'microscope' => get_string('icon_microscope', 'theme_compecer'),
+        'flask' => get_string('icon_flask', 'theme_compecer'),
+        'atom' => get_string('icon_atom', 'theme_compecer'),
+        'brain' => get_string('icon_brain', 'theme_compecer'),
+        'university' => get_string('icon_university', 'theme_compecer'),
+        'award' => get_string('icon_award', 'theme_compecer'),
+        'user-graduate' => get_string('icon_usergraduate', 'theme_compecer'),
+        'chalkboard-teacher' => get_string('icon_teacher', 'theme_compecer')
+    ];
+
+    for ($i = 1; $i <= 3; $i++) {
+        // Box icon
+        $name = "theme_compecer/careerbox{$i}icon";
+        $title = get_string('careerboxicon', 'theme_compecer', $i);
+        $description = get_string('careerboxicondesc', 'theme_compecer');
+        $default = 'graduation-cap';
+        $setting = new admin_setting_configselect($name, $title, $description, $default, $icons);
+        $page->add($setting);
+
+        // Box title
+        $name = "theme_compecer/careerbox{$i}title";
+        $title = get_string('careerboxtitle', 'theme_compecer', $i);
+        $description = get_string('careerboxtitledesc', 'theme_compecer');
+        $default = get_string('careerboxtitledefault', 'theme_compecer', $i);
+        $setting = new admin_setting_configtext($name, $title, $description, $default);
+        $page->add($setting);
+
+        // Box content
+        $name = "theme_compecer/careerbox{$i}content";
+        $title = get_string('careerboxcontent', 'theme_compecer', $i);
+        $description = get_string('careerboxcontentdesc', 'theme_compecer');
+        $default = get_string('careerboxcontentdefault', 'theme_compecer', $i);
+        $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+        $page->add($setting);
+    }
+
+    $settings->add_tab($page);
+
+    // Chat Integration Tab
+    $page = new admin_settingpage('theme_compecer_chat', get_string('chatsettings', 'theme_compecer'));
 
     $name = 'theme_compecer/enable_chat';
     $title = get_string('enable_chat', 'theme_compecer');
@@ -102,12 +191,10 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // SECTION: Accessibility
-    $page->add(new admin_setting_heading(
-        'theme_compecer_accessibility',
-        get_string('themesettingsaccessibility', 'theme_compecer'),
-        get_string('themesettingsaccessibilitydesc', 'theme_compecer')
-    ));
+    $settings->add_tab($page);
+
+    // Accessibility Tab
+    $page = new admin_settingpage('theme_compecer_accessibility', get_string('accessibilitysettings', 'theme_compecer'));
 
     $name = 'theme_compecer/accessibility_widget';
     $title = get_string('accessibility_widget', 'theme_compecer');
@@ -117,12 +204,10 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // SECTION: Copy/Paste Settings
-    $page->add(new admin_setting_heading(
-        'theme_compecer_copypaste',
-        get_string('themesettingscopypaste', 'theme_compecer'),
-        get_string('themesettingscopypaste_desc', 'theme_compecer')
-    ));
+    $settings->add_tab($page);
+
+    // Copy/Paste Settings Tab
+    $page = new admin_settingpage('theme_compecer_copypaste', get_string('copypastesettings', 'theme_compecer'));
 
     $name = 'theme_compecer/copypaste_prevention';
     $title = get_string('copypaste_prevention', 'theme_compecer');
@@ -132,7 +217,6 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Get all roles for multiselect
     require_once($CFG->libdir . '/accesslib.php');
     $roles = role_get_names(null, ROLENAME_ORIGINAL);
     $roles_array = array();
@@ -148,17 +232,15 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // SECTION: Login Settings
-    $page->add(new admin_setting_heading(
-        'theme_compecer_login',
-        get_string('themesettingslogin', 'theme_compecer'),
-        get_string('themesettingslogindesc', 'theme_compecer')
-    ));
+    $settings->add_tab($page);
+
+    // Login Settings Tab
+    $page = new admin_settingpage('theme_compecer_login', get_string('loginsettings', 'theme_compecer'));
 
     $name = 'theme_compecer/loginbg_image';
     $title = get_string('loginbg_image', 'theme_compecer');
     $description = get_string('loginbg_imagedesc', 'theme_compecer', $a);
-    $opts = array('subdirs' => 0, 'accepted_types' => 'web_image');
+    $opts = array('subdirs' => 0, 'accepted_types' => array('web_image'));
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'loginbg_image', 0, $opts);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
@@ -170,34 +252,5 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // About Settings Section
-    $page->add(new admin_setting_heading(
-        'theme_compecer_about',
-        get_string('themesettingsabout', 'theme_compecer'),
-        get_string('themesettingsaboutdesc', 'theme_compecer')
-    ));
-
-    // Toggle visibility of about text
-    $name = 'theme_compecer/hideabouttext';
-    $title = get_string('hideabouttext', 'theme_compecer');
-    $description = get_string('hideabouttextdesc', 'theme_compecer');
-    $default = 0;  // Default to showing the about text
-    $choices = array(
-        0 => get_string('show', 'theme_compecer'),
-        1 => get_string('hide', 'theme_compecer')
-    );
-    $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // About text setting
-    $name = 'theme_compecer/abouttext';
-    $title = get_string('abouttext', 'theme_compecer');
-    $description = get_string('abouttextdesc', 'theme_compecer');
-    $default = '<p><strong>IngeWeb - Soluciones para triunfar en Internet</strong><br>Expertos en Moodle, BigBlueButton, Wordpress y Joomla.<br><strong>www.ingeweb.co</strong></p>';
-    $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    $settings->insert_tab($page);
+    $settings->add_tab($page);
 }
