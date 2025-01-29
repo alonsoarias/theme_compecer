@@ -1,0 +1,170 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_moove/frontpage
+    Moodle frontpage template.
+}}
+{{> theme_moove/head }}
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+<div id="page-wrapper" class="d-print-block">
+    {{{ output.standard_top_of_body_html }}}
+    {{> theme_moove/navbar }}
+
+    <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container bg-white">
+        <!-- Slider Section -->
+        {{#slidercount}}
+        <section id="mooveslideshow" class="position-relative">
+            <div id="frontpage-carousel" class="carousel slide" data-ride="carousel">
+                {{^slidersingleslide}}
+                <ol class="carousel-indicators">
+                    {{#slides}}
+                        <li data-target="#frontpage-carousel" data-slide-to="{{{key}}}" {{#active}}class="active"{{/active}}></li>
+                    {{/slides}}
+                </ol>
+                {{/slidersingleslide}}
+                <div class="carousel-inner">
+                    {{#slides}}
+                        <div class="carousel-item {{#active}}active{{/active}}">
+                            <img src="{{{image}}}" alt="{{{slidertitle}}}" class="w-100">
+                            {{#hascaption}}
+                                <div class="carousel-caption d-none d-md-block">
+                                    {{#title}}<h2 class="display-4 text-white">{{{.}}}</h2>{{/title}}
+                                    {{#caption}}<div class="lead text-white">{{{.}}}</div>{{/caption}}
+                                </div>
+                            {{/hascaption}}
+                        </div>
+                    {{/slides}}
+                </div>
+                {{^slidersingleslide}}
+                <a class="carousel-control-prev" href="#frontpage-carousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">{{#str}}previous{{/str}}</span>
+                </a>
+                <a class="carousel-control-next" href="#frontpage-carousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">{{#str}}next{{/str}}</span>
+                </a>
+                {{/slidersingleslide}}
+            </div>
+        </section>
+        {{/slidercount}}
+
+        <!-- About Section -->
+        {{#aboutsection}}
+        <section id="about-section" class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="section-heading mb-4">{{{abouttitle}}}</h2>
+                        <div class="section-content">
+                            {{{aboutcontent}}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {{/aboutsection}}
+
+        <!-- Career Boxes Section -->
+        {{#careerboxes}}
+        <section id="career-section" class="py-5 bg-light">
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="section-heading">{{#str}}careersection_title, theme_compecer{{/str}}</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    {{#boxes}}
+                    <div class="col-md-4 mb-4">
+                        <div class="career-box text-center h-100 p-4 bg-white rounded shadow-sm">
+                            <div class="icon-wrapper mb-4">
+                                <i class="fas fa-{{{icon}}} fa-3x text-primary"></i>
+                            </div>
+                            <h3 class="h4 mb-3">{{{title}}}</h3>
+                            <div class="description">
+                                {{{content}}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/boxes}}
+                </div>
+            </div>
+        </section>
+        {{/careerboxes}}
+
+        <!-- Main Content Area -->
+        <div id="topofscroll">
+            <div id="page-content" class="d-print-block main-inner">
+                <div id="region-main-box">
+                    <section id="region-main" aria-label="{{#str}}content{{/str}}">
+                        {{{ output.course_content_header }}}
+                        {{{ output.main_content }}}
+                        {{{ output.course_content_footer }}}
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        {{#faqenabled}}
+        <section id="faq" class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">{{#str}}faq, theme_moove{{/str}}</h2>
+                <div class="accordion" id="accordionFaq">
+                    {{#faq}}
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header bg-white" id="heading-{{{id}}}">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse-{{{id}}}" aria-expanded="false" aria-controls="collapse-{{{id}}}">
+                                        {{{question}}}
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapse-{{{id}}}" class="collapse" aria-labelledby="heading-{{{id}}}" data-parent="#accordionFaq">
+                                <div class="card-body">
+                                    {{{answer}}}
+                                </div>
+                            </div>
+                        </div>
+                    {{/faq}}
+                </div>
+            </div>
+        </section>
+        {{/faqenabled}}
+
+        {{> theme_moove/footer }}
+    </div>
+    {{{ output.standard_after_main_region_html }}}
+</div>
+
+</body>
+</html>
+
+{{#js}}
+require(['jquery', 'theme_boost/bootstrap/carousel'], function($, Carousel) {
+    $('#frontpage-carousel').carousel({
+        interval: 5000,
+        keyboard: true,
+        ride: 'carousel',
+        wrap: true,
+        pause: 'hover'
+    });
+});
+{{/js}}
