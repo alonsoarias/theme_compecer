@@ -189,8 +189,4 @@ if (!empty($PAGE->theme->settings->faqenabled)) {
     $templatecontext['faq'] = $faqs;
 }
 
-if (isloggedin()) {
-    echo $OUTPUT->render_from_template('theme_moove/drawers', $templatecontext);
-} else {
     echo $OUTPUT->render_from_template('theme_compecer/theme_moove/frontpage', $templatecontext);
-}
