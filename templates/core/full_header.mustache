@@ -46,11 +46,26 @@
                         {{{contextheader}}}
                     </div>
                 {{/contextheader}}
+
+                {{#pageheadingbutton}}
+                    <div class="header-actions ml-2">
+                        {{{pageheadingbutton}}}
+                    </div>
+                {{/pageheadingbutton}}
+
                 {{#hasnavbar}}
                     <div class="header-navigation">
-                        {{{navbar}}}
+                        <nav aria-label="{{#str}}breadcrumb{{/str}}">
+                            {{{navbar}}}
+                        </nav>
                     </div>
                 {{/hasnavbar}}
+
+                {{#activityheader}}
+                    <div class="activity-header">
+                        {{{activityheader}}}
+                    </div>
+                {{/activityheader}}
             </div>
         </div>
     </div>
@@ -75,7 +90,9 @@
         {{/welcomemessage}}
         {{#hasnavbar}}
             <div class="header-navigation">
-                {{{navbar}}}
+                <nav aria-label="{{#str}}breadcrumb{{/str}}">
+                    {{{navbar}}}
+                </nav>
             </div>
         {{/hasnavbar}}
     </div>
