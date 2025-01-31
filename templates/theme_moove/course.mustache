@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template theme_compecer/course
+    @template theme_moove/drawers
 
-    Compecer course layout template.
+    Boost drawer template.
 
     Context variables required for this template:
     * sitename - The name of the site
@@ -28,7 +28,6 @@
     * courseindexopen - true if the nav drawer should be open on page load
     * regionmainsettingsmenu - HTML for the region main settings menu
     * hasregionmainsettingsmenu - There is a region main settings menu on this page.
-    * courseimageurl - URL of the course image
 
     Example context (json):
     {
@@ -47,13 +46,14 @@
         "blockdraweropen": true,
         "regionmainsettingsmenu": "",
         "hasregionmainsettingsmenu": false,
-        "addblockbutton": "",
-        "courseimageurl": "https://example.com/image.jpg"
+        "addblockbutton": ""
     }
 }}
-{{> theme_boost/head }}
+{{> theme_moove/head }}
 
 <body {{{ bodyattributes }}}>
+{{> theme_moove/accessibilitybar }}
+
 {{> core/local/toast/wrapper}}
 <div id="page-wrapper" class="d-print-block">
 
@@ -65,7 +65,7 @@
         {{< theme_boost/drawer }}
             {{$id}}theme_boost-drawers-courseindex{{/id}}
             {{$drawerheadercontent}}
-            {{> theme_boost/courseindexdrawercontrols}}
+                {{> theme_boost/courseindexdrawercontrols}}
             {{/drawerheadercontent}}
             {{$drawerclasses}}drawer drawer-left {{#courseindexopen}}show{{/courseindexopen}}{{/drawerclasses}}
             {{$drawercontent}}
@@ -96,6 +96,8 @@
         {{/ theme_boost/drawer}}
     {{/hasblocks}}
     <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers {{#courseindexopen}}show-drawer-left{{/courseindexopen}} {{#blockdraweropen}}show-drawer-right{{/blockdraweropen}} drag-container">
+
+        {{{ output.full_header }}}
 
         <div id="topofscroll" class="main-inner">
             <div class="coursecontentblocks">
@@ -138,28 +140,12 @@
                     </div>
                 {{/hasblocks}}
             </div>
-
-            <header id="page-header" class="header-wrapper">
-                {{#courseimageurl}}
-                <div class="breadcrumb-header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{{courseimageurl}}}');">
-                    <div class="container">
-                        <div class="breadcrumb-inner">
-                            {{{output.full_header}}}
-                        </div>
-                    </div>
-                </div>
-                {{/courseimageurl}}
-                {{^courseimageurl}}
-                    {{{output.full_header}}}
-                {{/courseimageurl}}
-            </header>
-            {{{coursenotices}}}{{!-- Notificaciones específicas para cursos --}}
-            <div id="page-content" class="pb-3 d-print-block">
+            <div id="page-content" class="d-print-block">
                 <div id="region-main-box">
                     {{#hasregionmainsettingsmenu}}
-                        <div id="region-main-settings-menu" class="d-print-none">
-                            <div> {{{ regionmainsettingsmenu }}} </div>
-                        </div>
+                    <div id="region-main-settings-menu" class="d-print-none">
+                        <div> {{{ regionmainsettingsmenu }}} </div>
+                    </div>
                     {{/hasregionmainsettingsmenu}}
                     <section id="region-main" aria-label="{{#str}}content{{/str}}">
                         {{#hasregionmainsettingsmenu}}
@@ -176,13 +162,16 @@
                                 </div>
                             </div>
                         {{/overflow}}
+
                         {{{ output.main_content }}}
                         {{{ output.activity_navigation }}}
                         {{{ output.course_content_footer }}}
+
                     </section>
                 </div>
             </div>
         </div>
+
         {{> theme_moove/footer }}
     </div>
     {{{ output.standard_after_main_region_html }}}
