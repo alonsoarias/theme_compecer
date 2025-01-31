@@ -39,7 +39,7 @@ use help_icon;
 use context_system;
 use core_course_list_element;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../../moove/classes/output/core_renderer.php');
 require_once(__DIR__ . '/../util/theme_settings.php');
@@ -48,8 +48,7 @@ require_once(__DIR__ . '/../util/theme_settings.php');
  * Renderers to align Moodle's HTML with that expected by Bootstrap
  *
  */
-class core_renderer extends \theme_moove\output\core_renderer
-{
+class core_renderer extends \theme_moove\output\core_renderer {
 
     /**
      * Renders the login form.
@@ -57,8 +56,7 @@ class core_renderer extends \theme_moove\output\core_renderer
      * @param \core_auth\output\login $form The renderable.
      * @return string
      */
-    public function render_login(\core_auth\output\login $form)
-    {
+    public function render_login(\core_auth\output\login $form) {
         global $SITE, $CFG;
 
         $context = $form->export_for_template($this);
@@ -95,8 +93,7 @@ class core_renderer extends \theme_moove\output\core_renderer
      *
      * @return string
      */
-    public function get_theme_img_url($img)
-    {
+    public function get_theme_img_url($img) {
         $theme = theme_config::load('compecer');
         return $theme->setting_file_url($img, $img);
     }
@@ -106,8 +103,7 @@ class core_renderer extends \theme_moove\output\core_renderer
      *
      * @return string HTML footer content
      */
-    public function standard_footer_html()
-    {
+    public function standard_footer_html() {
         global $CFG, $USER;
 
         $output = parent::standard_footer_html();
@@ -135,80 +131,77 @@ class core_renderer extends \theme_moove\output\core_renderer
         return $output;
     }
 
-    /**
-     * Returns full header.
-     *
-     * @return string HTML for header
-     */
-    public function full_header() {
-        global $CFG, $USER, $PAGE;
-    
-        if ($USER->id != 2) {
-            $CFG->perfdebug = 0;
-        }
-    
-        $theme = theme_config::load('compecer');
-        $output = '';
-    
-        // Si NO estamos en un curso (o estamos en la página principal), mostramos las notificaciones en el header
-        if ($PAGE->pagelayout !== 'course' || $PAGE->course->id == 1) {
-            if (!empty(trim($theme->settings->generalnotice))) {
-                if ($theme->settings->generalnoticemode == 'info') {
-                    $output .= '<div class="alert alert-info mt-4"><strong><i class="fa fa-info-circle"></i></strong> ' . $theme->settings->generalnotice . '</div>';
-                }
-                if ($theme->settings->generalnoticemode == 'danger') {
-                    $output .= '<div class="alert alert-danger mt-4"><strong><i class="fa fa-warning"></i></strong> ' . $theme->settings->generalnotice . '</div>';
-                }
-            }
-    
-            if (is_siteadmin() && $theme->settings->generalnoticemode == 'off') {
-                $output .= '<div class="alert mt-4"><a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer"><strong><i class="fa fa-edit"></i></strong> ' . get_string('generalnotice_create', 'theme_compecer') . '</a></div>';
-            }
-        }
-    
-        $output .= parent::full_header();
-        return $output;
+/**
+ * Returns full header.
+ *
+ * @return string HTML for header
+ */
+public function full_header() {
+    global $CFG, $USER, $PAGE, $COURSE;
+
+    if ($USER->id != 2) {
+        $CFG->perfdebug = 0;
     }
+
+    $theme = theme_config::load('compecer');
     
-    /**
-     * Renders general notices for course pages.
-     *
-     * @return string HTML for notices
-     */
-    public function render_course_notices() {
-        global $CFG, $PAGE;
+    // Preparar el contexto para la plantilla
+    $header = new stdClass();
+    
+    // Manejar las notificaciones
+    $header->hasnotice = false;
+    $header->notice = '';
+    $header->noticeclass = '';
+    $header->noticeicon = '';
+    
+    if (!empty(trim($theme->settings->generalnotice))) {
+        $header->hasnotice = true;
+        $header->notice = $theme->settings->generalnotice;
         
-        // Solo renderizamos para páginas de curso
-        if ($PAGE->pagelayout !== 'course' || $PAGE->course->id == 1) {
-            return '';
+        if ($theme->settings->generalnoticemode == 'info') {
+            $header->noticeclass = 'alert-info';
+            $header->noticeicon = 'fa-info-circle';
+        } else if ($theme->settings->generalnoticemode == 'danger') {
+            $header->noticeclass = 'alert-danger';
+            $header->noticeicon = 'fa-warning';
         }
-    
-        $theme = theme_config::load('compecer');
-        $output = '';
-    
-        if (!empty(trim($theme->settings->generalnotice))) {
-            if ($theme->settings->generalnoticemode == 'info') {
-                $output .= '<div class="alert alert-info mt-4"><strong><i class="fa fa-info-circle"></i></strong> ' . $theme->settings->generalnotice . '</div>';
-            }
-            if ($theme->settings->generalnoticemode == 'danger') {
-                $output .= '<div class="alert alert-danger mt-4"><strong><i class="fa fa-warning"></i></strong> ' . $theme->settings->generalnotice . '</div>';
-            }
-        }
-    
-        if (is_siteadmin() && $theme->settings->generalnoticemode == 'off') {
-            $output .= '<div class="alert mt-4"><a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer"><strong><i class="fa fa-edit"></i></strong> ' . get_string('generalnotice_create', 'theme_compecer') . '</a></div>';
-        }
-    
-        return $output;
+    } else if (is_siteadmin() && $theme->settings->generalnoticemode == 'off') {
+        $header->hasnotice = true;
+        $header->notice = get_string('generalnotice_create', 'theme_compecer');
+        $header->noticeclass = 'alert-light';
+        $header->noticeicon = 'fa-edit';
+        $header->isadminnotice = true;
+        $header->settingsurl = $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer';
     }
+    
+    // Obtener imagen del curso
+    $header->courseimageurl = '';
+    if ($PAGE->course && $PAGE->course->id > 1) {
+        require_once($CFG->dirroot . '/theme/compecer/lib.php');
+        $header->courseimageurl = theme_compecer_get_course_image($PAGE->course);
+    }
+    
+    // Agregar información del contexto
+    $header->contextheader = $this->context_header();
+    $header->pageheadingbutton = $this->page_heading_button();
+    $header->courseheader = $this->course_header();
+    
+    if ($this->page->navbar) {
+        $header->hasnavbar = true;
+        $header->navbar = $this->navbar();
+    }
+
+    $header->headeractions = $this->page->get_header_actions();
+    
+    return $this->render_from_template('theme_compecer/core/full_header', $header);
+}
 
     /**
      * Adds chat widget if enabled.
      *
      * @return string Chat widget HTML
      */
-    protected function add_chat_widget()
-    {
+    protected function add_chat_widget() {
         global $USER;
         if (!isloggedin() || empty($this->page->theme->settings->tawkto_embed_url)) {
             return '';
@@ -246,8 +239,7 @@ class core_renderer extends \theme_moove\output\core_renderer
     /**
      * Adds copy/paste prevention JavaScript for specified roles.
      */
-    protected function add_copy_paste_prevention()
-    {
+    protected function add_copy_paste_prevention() {
         global $USER, $PAGE, $COURSE;
 
         // Get restricted roles from theme settings
