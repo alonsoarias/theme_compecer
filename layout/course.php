@@ -99,13 +99,6 @@ $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settin
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
-// Get course image
-$course = $PAGE->course;
-$courseimageurl = '';
-if ($course->id > 1) {
-    $courseimageurl = theme_compecer_get_course_image($course);
-}
-
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => \core\context\course::instance(SITEID), "escape" => false]),
@@ -129,9 +122,7 @@ $templatecontext = [
     'addblockbutton' => $addblockbutton,
     'enablecourseindex' => $themesettings->enablecourseindex,
     'addcontentblockbutton' => $addcontentblockbutton,
-    'contentblocks' => $contentblocks,
-    'courseimageurl' => $courseimageurl,
-    'coursenotices' => $OUTPUT->render_course_notices()
+    'contentblocks' => $contentblocks
 ];
 
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
