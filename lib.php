@@ -27,13 +27,21 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../moove/lib.php');
 
+/**
+ * Get course image
+ *
+ * @param object $corecourselistelement
+ * @param bool $islist
+ * @return string
+ */
 function theme_compecer_get_course_image($corecourselistelement, $islist = false) {
     global $CFG, $OUTPUT;
+
     if (!$islist && $corecourselistelement instanceof stdClass) {
         $corecourselistelement = new \core_course_list_element($corecourselistelement);
     }
+
     if (method_exists($corecourselistelement, 'get_course_overviewfiles')) {
-        // Course image.
         foreach ($corecourselistelement->get_course_overviewfiles() as $file) {
             $isimage = $file->is_valid_image();
             $courseimage = file_encode_url(
@@ -47,122 +55,8 @@ function theme_compecer_get_course_image($corecourselistelement, $islist = false
             }
         }
     }
-    // Return a generated SVG image if no image is found.
+
     return $OUTPUT->get_generated_image_for_id($corecourselistelement->id);
-}
-
-function theme_compecer_get_extra_scss($theme) {
-    $parent_theme = theme_config::load('moove');
-    $scss = theme_moove_get_extra_scss($parent_theme);
-
-    //Extra SCSS if needed..
-    $scss .= theme_compecer_set_extra_img($theme);
-
-    return $scss;
-}
-
-function theme_compecer_get_pre_scss($theme) {
-    $scss = theme_moove_get_extra_scss($theme);
-
-    return $scss;
-}
-
-function theme_compecer_get_main_scss_content($theme) {
-    global $CFG;
-
-    // compecer scss.
-    $compecer_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/_variables.scss');
-    $custom_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/custom_variables.scss');
-    $compecer = file_get_contents($CFG->dirroot . '/theme/compecer/scss/compecer.scss');
-    $custom = file_get_contents($CFG->dirroot . '/theme/compecer/style/custom.css');
-
-    // Combine them with moove.
-    return $compecer_variables . "\n" . $custom_variables . "\n" . theme_moove_get_main_scss_content($theme) . "\n" . $compecer . "\n" . $custom;
-
-    $scss = '';
-    $filename = !empty($theme->settings->preset) ? $theme->settings->preset : null;
-    $fs = get_file_storage();
-
-    $context = context_system::instance();
-    if ($filename == 'default.scss') {
-        // We still load the default preset files directly from the boost theme. No sense in duplicating them.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
-    } else if ($filename == 'plain.scss') {
-        // We still load the default preset files directly from the boost theme. No sense in duplicating them.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/plain.scss');
-    } else if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_moove', 'preset', 0, '/', $filename))) {
-        // This preset file was fetched from the file area for theme_moove and not theme_boost (see the line above).
-        $scss .= $presetfile->get_content();
-    } else {
-        // Safety fallback - maybe new installs etc.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
-    }
-
-    // Moove scss.
-    $moovevariables = file_get_contents($CFG->dirroot . '/theme/moove/scss/moove/_variables.scss');
-    $moove = file_get_contents($CFG->dirroot . '/theme/moove/scss/moove.scss');
-
-    // Combine them together.
-    return $moovevariables . "\n" . $compecer_variables . "\n" . $custom_variables . "\n" . $scss . "\n" . $moove . "\n" . $compecer . "\n" . $custom;
-}
-
-function theme_compecer_set_extra_img($theme) {
-    global $OUTPUT;
-
-    $css = '';
-    $topfooterimg = $theme->setting_file_url('topfooterimg', 'topfooterimg');
-
-    if (is_null($topfooterimg)) {
-        $css =  "#top-footer {background-image: none;}";
-    } else {
-        $css = "#top-footer {background-image: url('$topfooterimg');}";
-    }
-
-    $content = '';
-
-    // Sets the login background image.
-    $loginbg_image = $theme->setting_file_url('loginbg_image', 'loginbg_image');
-    if (!empty($loginbg_image)) {
-        $content .= 'body.pagelayout-login #page { ';
-        $content .= "background-image: url('$loginbg_image'); background-size: cover;";
-        $content .= ' }';
-    }
-
-    // Always return the background image with the scss when we have it.
-    return !empty($theme->settings->scss) ? $theme->settings->scss . ' ' . $content : $content;
-    return $css;
-}
-
-/**
- * Serves any files associated with the theme settings.
- *
- * @param stdClass $course
- * @param stdClass $cm
- * @param context $context
- * @param string $filearea
- * @param array $args
- * @param bool $forcedownload
- * @param array $options
- * @return mixed
- */
-function theme_compecer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    $theme = theme_config::load('compecer');
-
-    if ($context->contextlevel == CONTEXT_SYSTEM) {
-        $validfileareas = [
-            'loginbg_image',
-            'sliderimage1',
-            'sliderimage2',
-            'sliderimage3',
-            'topfooterimg'
-        ];
-        
-        if (in_array($filearea, $validfileareas)) {
-            return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-        }
-    }
-
-    return theme_moove_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options);
 }
 
 /**
@@ -192,4 +86,172 @@ function theme_compecer_get_setting($setting, $format = false) {
     }
 
     return format_string($theme->settings->$setting);
+}
+
+/**
+ * Serves any files associated with the theme settings.
+ *
+ * @param stdClass $course
+ * @param stdClass $cm
+ * @param context $context
+ * @param string $filearea
+ * @param array $args
+ * @param bool $forcedownload
+ * @param array $options
+ * @return mixed
+ */
+function theme_compecer_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+    $theme = theme_config::load('compecer');
+
+    if ($context->contextlevel == CONTEXT_SYSTEM) {
+        $validfileareas = [
+            'loginbg_image',
+            'sliderimage1',
+            'sliderimage2',
+            'sliderimage3',
+            'sliderimage1_mobile',
+            'sliderimage2_mobile',
+            'sliderimage3_mobile',
+            'topfooterimg'
+        ];
+        
+        if (in_array($filearea, $validfileareas)) {
+            return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
+        }
+    }
+
+    return theme_moove_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options);
+}
+
+/**
+ * Returns the main SCSS content.
+ *
+ * @param theme_config $theme The theme config object.
+ * @return string
+ */
+function theme_compecer_get_main_scss_content($theme) {
+    global $CFG;
+
+    $scss = '';
+    $filename = !empty($theme->settings->preset) ? $theme->settings->preset : null;
+    $fs = get_file_storage();
+
+    $context = context_system::instance();
+    if ($filename == 'default.scss') {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
+    } else if ($filename == 'plain.scss') {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/plain.scss');
+    } else if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_moove', 'preset', 0, '/', $filename))) {
+        $scss .= $presetfile->get_content();
+    } else {
+        // Safety fallback - maybe new installs etc.
+        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
+    }
+
+    // Compecer scss.
+    $compecer_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/_variables.scss');
+    $custom_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/custom_variables.scss');
+    $compecer = file_get_contents($CFG->dirroot . '/theme/compecer/scss/compecer.scss');
+    $custom = file_get_contents($CFG->dirroot . '/theme/compecer/style/custom.css');
+
+    // Moove scss.
+    $moovevariables = file_get_contents($CFG->dirroot . '/theme/moove/scss/moove/_variables.scss');
+    $moove = file_get_contents($CFG->dirroot . '/theme/moove/scss/moove.scss');
+
+    // Combine them together.
+    return $moovevariables . "\n" . $compecer_variables . "\n" . $custom_variables . "\n" . $scss . "\n" . $moove . "\n" . $compecer . "\n" . $custom;
+}
+
+/**
+ * Get theme extra SCSS content.
+ *
+ * @param theme_config $theme The theme config object.
+ * @return string Returns the SCSS content.
+ */
+function theme_compecer_get_extra_scss($theme) {
+    $parent_theme = theme_config::load('moove');
+    $scss = theme_moove_get_extra_scss($parent_theme);
+
+    // Extra SCSS if needed.
+    $scss .= theme_compecer_set_extra_img($theme);
+
+    return $scss;
+}
+
+/**
+ * Set extra images.
+ *
+ * @param theme_config $theme The theme config object.
+ * @return string Returns the extra images SCSS content.
+ */
+function theme_compecer_set_extra_img($theme) {
+    global $OUTPUT;
+
+    $css = '';
+    $topfooterimg = $theme->setting_file_url('topfooterimg', 'topfooterimg');
+
+    if (is_null($topfooterimg)) {
+        $css =  "#top-footer {background-image: none;}";
+    } else {
+        $css = "#top-footer {background-image: url('$topfooterimg');}";
+    }
+
+    $content = '';
+
+    // Sets the login background image.
+    $loginbg_image = $theme->setting_file_url('loginbg_image', 'loginbg_image');
+    if (!empty($loginbg_image)) {
+        $content .= 'body.pagelayout-login #page { ';
+        $content .= "background-image: url('$loginbg_image'); background-size: cover;";
+        $content .= ' }';
+    }
+
+    // Always return the background image with the scss when we have it.
+    return !empty($theme->settings->scss) ? $theme->settings->scss . ' ' . $content : $content;
+    return $css;
+}
+
+/**
+ * Get compiled css.
+ *
+ * @return string Compiled CSS
+ */
+function theme_compecer_get_precompiled_css() {
+    global $CFG;
+    return file_get_contents($CFG->dirroot . '/theme/compecer/style/compecer.css');
+}
+
+/**
+ * Get SCSS to prepend.
+ *
+ * @param theme_config $theme The theme config object.
+ * @return string
+ */
+function theme_compecer_get_pre_scss($theme) {
+    $scss = '';
+    $configurable = [
+        // Config key => [variableName, ...].
+        'brandcolor' => ['brand-primary'],
+        'navbarheadercolor' => ['navbar-header-color'],
+        'navbarbg' => ['navbar-bg', 'navbar-bg-hover'],
+        'navbarbghover' => ['navbar-bg-hover']
+    ];
+
+    // Prepend variables first.
+    foreach ($configurable as $configkey => $targets) {
+        $value = isset($theme->settings->{$configkey}) ? $theme->settings->{$configkey} : null;
+        if (empty($value)) {
+            continue;
+        }
+        array_map(function($target) use (&$scss, $value) {
+            $scss .= '$' . $target . ': ' . $value . ";\n";
+        }, (array) $targets);
+    }
+
+    // Prepend pre-scss.
+    if (!empty($theme->settings->scsspre)) {
+        $scss .= $theme->settings->scsspre;
+    }
+
+    return $scss;
 }
