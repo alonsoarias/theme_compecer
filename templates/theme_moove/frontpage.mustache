@@ -29,7 +29,7 @@
     <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container bg-white">
         <!-- Slider Section -->
         {{#slidercount}}
-        <section id="mooveslideshow" class="position-relative">
+        <section id="mooveslideshow" class="position-relative {{#isloggedin}}slider-logged-in{{/isloggedin}}">
             <div id="frontpage-carousel" class="carousel slide" data-ride="carousel">
                 {{^slidersingleslide}}
                 <ol class="carousel-indicators">
@@ -41,7 +41,17 @@
                 <div class="carousel-inner">
                     {{#slides}}
                         <div class="carousel-item {{#active}}active{{/active}}">
-                            <img src="{{{image}}}" alt="{{{slidertitle}}}" class="w-100">
+                            <div class="carousel-image-wrapper">
+                                <!-- Imagen Desktop -->
+                                <img src="{{{image}}}" alt="{{{slidertitle}}}" class="carousel-image carousel-image-desktop">
+                                <!-- Imagen Mobile -->
+                                {{#mobile_image}}
+                                    <img src="{{{mobile_image}}}" alt="{{{slidertitle}}}" class="carousel-image carousel-image-mobile">
+                                {{/mobile_image}}
+                                {{^mobile_image}}
+                                    <img src="{{{image}}}" alt="{{{slidertitle}}}" class="carousel-image carousel-image-mobile">
+                                {{/mobile_image}}
+                            </div>
                             {{#hascaption}}
                                 <div class="carousel-caption d-none d-md-block">
                                     {{#title}}<h2 class="display-4 text-white">{{{.}}}</h2>{{/title}}
@@ -67,14 +77,12 @@
 
         <!-- About Section -->
         {{#aboutsection}}
-        <section id="about-section" class="py-5">
+        <section id="about-section" class="py-5 animate-section">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 text-center">
-                        <h2 class="section-heading mb-4">{{{abouttitle}}}</h2>
-                        <div class="section-content">
-                            {{{aboutcontent}}}
-                        </div>
+                <div class="about-content-wrapper">
+                    <h2 class="section-heading mb-4">{{{abouttitle}}}</h2>
+                    <div class="section-content">
+                        {{{aboutcontent}}}
                     </div>
                 </div>
             </div>
@@ -83,7 +91,7 @@
 
         <!-- Career Boxes Section -->
         {{#careerboxes}}
-        <section id="career-section" class="py-5 bg-light">
+        <section id="career-section" class="py-5 bg-light animate-section">
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-8 text-center">
@@ -110,7 +118,7 @@
         {{/careerboxes}}
 
         <!-- Main Content Area -->
-        <div id="topofscroll">
+        <div id="topofscroll" class="animate-section">
             <div id="page-content" class="d-print-block main-inner">
                 <div id="region-main-box">
                     <section id="region-main" aria-label="{{#str}}content{{/str}}">
@@ -124,7 +132,7 @@
 
         <!-- FAQ Section -->
         {{#faqenabled}}
-        <section id="faq" class="py-5 bg-light">
+        <section id="faq" class="py-5 bg-light animate-section">
             <div class="container">
                 <h2 class="text-center mb-5">{{#str}}faq, theme_moove{{/str}}</h2>
                 <div class="accordion" id="accordionFaq">
@@ -132,12 +140,15 @@
                         <div class="card shadow-sm mb-3">
                             <div class="card-header bg-white" id="heading-{{{id}}}">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse-{{{id}}}" aria-expanded="false" aria-controls="collapse-{{{id}}}">
+                                    <button class="btn btn-link btn-block text-left text-decoration-none" type="button" 
+                                            data-toggle="collapse" data-target="#collapse-{{{id}}}" 
+                                            aria-expanded="false" aria-controls="collapse-{{{id}}}">
                                         {{{question}}}
                                     </button>
                                 </h2>
                             </div>
-                            <div id="collapse-{{{id}}}" class="collapse" aria-labelledby="heading-{{{id}}}" data-parent="#accordionFaq">
+                            <div id="collapse-{{{id}}}" class="collapse" 
+                                 aria-labelledby="heading-{{{id}}}" data-parent="#accordionFaq">
                                 <div class="card-body">
                                     {{{answer}}}
                                 </div>
@@ -158,7 +169,8 @@
 </html>
 
 {{#js}}
-require(['jquery', 'theme_boost/bootstrap/carousel'], function($, Carousel) {
+require(['jquery', 'theme_boost/bootstrap/carousel'], function($) {
+    // Inicialización del carrusel
     $('#frontpage-carousel').carousel({
         interval: 5000,
         keyboard: true,
@@ -166,5 +178,28 @@ require(['jquery', 'theme_boost/bootstrap/carousel'], function($, Carousel) {
         wrap: true,
         pause: 'hover'
     });
+
+    // Función para manejar las animaciones de entrada
+    function handleScrollAnimations() {
+        const animateSections = document.querySelectorAll('.animate-section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px'
+        });
+
+        animateSections.forEach(section => {
+            observer.observe(section);
+        });
+    }
+
+    // Inicializar animaciones
+    handleScrollAnimations();
 });
 {{/js}}
