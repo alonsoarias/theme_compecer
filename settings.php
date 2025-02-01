@@ -64,12 +64,20 @@ if ($ADMIN->fulltree) {
     $page->add($setting);
 
     for ($i = 1; $i <= 3; $i++) {
-        // Slider image
+        // Desktop slider image
         $name = "theme_compecer/sliderimage{$i}";
         $title = get_string('sliderimage', 'theme_compecer', $i);
-        $description = get_string('sliderimagedesc', 'theme_compecer');
+        $description = get_string('sliderimagedesc', 'theme_compecer') . ' (Desktop)';
         $opts = array('subdirs' => 0, 'accepted_types' => array('web_image'));
         $setting = new admin_setting_configstoredfile($name, $title, $description, "sliderimage{$i}", 0, $opts);
+        $page->add($setting);
+
+        // Mobile slider image
+        $name = "theme_compecer/sliderimage{$i}_mobile";
+        $title = get_string('sliderimage', 'theme_compecer', $i) . ' (Mobile)';
+        $description = get_string('sliderimagedesc', 'theme_compecer') . ' (Mobile)';
+        $opts = array('subdirs' => 0, 'accepted_types' => array('web_image'));
+        $setting = new admin_setting_configstoredfile($name, $title, $description, "sliderimage{$i}_mobile", 0, $opts);
         $page->add($setting);
 
         // Slider title
