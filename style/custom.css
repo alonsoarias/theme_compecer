@@ -727,3 +727,281 @@ body.compecer-co {
         }
     }
 }
+
+
+/* --------------- Estilos del Carrusel --------------- */
+#mooveslideshow {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+}
+
+/* Ajuste para usuarios logueados */
+#mooveslideshow.slider-logged-in {
+    margin-top: 20px;
+}
+
+#frontpage-carousel {
+    height: 100%;
+}
+
+#frontpage-carousel .carousel-inner,
+#frontpage-carousel .carousel-item {
+    height: 100%;
+}
+
+.carousel-image-wrapper {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Controles del carrusel */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.carousel-indicators {
+    bottom: 20px;
+}
+
+.carousel-indicators li {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+/* --------------- Estilos de Animación --------------- */
+.animate-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+}
+
+.animate-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --------------- Estilos de la Sección About --------------- */
+#about-section {
+    padding: 4rem 0;
+}
+
+#about-section .about-content-wrapper {
+    background-color: #84848a;
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.6s ease-out;
+}
+
+#about-section .about-content-wrapper.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#about-section .section-heading {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #FFD700;
+}
+
+#about-section .section-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #FFFFFF;
+}
+
+/* --------------- Estilos de Career Boxes --------------- */
+#career-section {
+    background-color: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.career-box {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.career-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.career-box .icon-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.career-box .icon-wrapper i {
+    color: #5AA9E6;
+    transition: transform 0.3s ease;
+}
+
+.career-box:hover .icon-wrapper i {
+    transform: scale(1.1);
+}
+
+.career-box .h4 {
+    color: #455a64;
+    font-weight: 600;
+}
+
+.career-box .description {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* --------------- Estilos del FAQ --------------- */
+#faq {
+    background-color: #f8f9fa;
+    padding: 4rem 0;
+}
+
+#faq .card {
+    border: none;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#faq .card-header {
+    background-color: #fff;
+    border: none;
+    padding: 1rem;
+}
+
+#faq .btn-link {
+    color: #455a64;
+    font-weight: 600;
+    text-decoration: none;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+}
+
+#faq .btn-link:hover,
+#faq .btn-link:focus {
+    color: #5AA9E6;
+    text-decoration: none;
+}
+
+#faq .card-body {
+    padding: 1.5rem;
+    background-color: #fff;
+    color: #666;
+}
+
+/* --------------- Media Queries --------------- */
+@media (max-width: 768px) {
+    #mooveslideshow,
+    .carousel-image-wrapper {
+        height: 400px;
+    }
+
+    .carousel-image-mobile {
+        display: block !important;
+    }
+    
+    .carousel-image-desktop {
+        display: none !important;
+    }
+
+    #about-section .about-content-wrapper {
+        padding: 2rem;
+    }
+
+    #about-section .section-heading {
+        font-size: 2rem;
+    }
+
+    .career-box {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #mooveslideshow,
+    .carousel-image-wrapper {
+        height: 300px;
+    }
+
+    .carousel-caption h2 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-caption .lead {
+        font-size: 1rem;
+    }
+
+    #about-section {
+        padding: 2rem 0;
+    }
+
+    .career-box {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .carousel-image-mobile {
+        display: none !important;
+    }
+    
+    .carousel-image-desktop {
+        display: block !important;
+    }
+}
+
+/* --------------- Utilidades --------------- */
+.shadow-hover {
+    transition: box-shadow 0.3s ease;
+}
+
+.shadow-hover:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Ajustes de scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ajustes de Accesibilidad */
+.btn:focus,
+.btn-link:focus {
+    outline: 2px solid #5AA9E6;
+    outline-offset: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
