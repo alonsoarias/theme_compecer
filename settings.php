@@ -255,8 +255,56 @@ if ($ADMIN->fulltree) {
 
     $name = 'theme_compecer/loginbg_color';
     $title = get_string('loginbg_color', 'theme_compecer');
+    // Continuación del Login Settings Tab...
+    $name = 'theme_compecer/loginbg_color';
+    $title = get_string('loginbg_color', 'theme_compecer');
     $description = get_string('loginbg_colordesc', 'theme_compecer');
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#b2cdea');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    $settings->add_tab($page);
+
+    // Nueva pestaña: Search and Categories Section Settings
+    $page = new admin_settingpage('theme_compecer_categories', get_string('categoriessettings', 'theme_compecer'));
+
+    // Enable Categories Display
+    $name = 'theme_compecer/enablecategories';
+    $title = get_string('enablecategories', 'theme_compecer');
+    $description = get_string('enablecategoriesdesc', 'theme_compecer');
+    $default = 1;
+    $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+    $page->add($setting);
+
+    // Selected Categories
+    $name = 'theme_compecer/selectedcategories';
+    $title = get_string('selectedcategories', 'theme_compecer');
+    $description = get_string('selectedcategoriesdesc', 'theme_compecer');
+    $categories = core_course_category::make_categories_list();
+    $setting = new admin_setting_configmultiselect($name, $title, $description, [], $categories);
+    $page->add($setting);
+
+    // Search Section Title
+    $name = 'theme_compecer/searchsectiontitle';
+    $title = get_string('searchsectiontitle', 'theme_compecer');
+    $description = get_string('searchsectiontitledesc', 'theme_compecer');
+    $default = get_string('searchsectiontitledefault', 'theme_compecer');
+    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $page->add($setting);
+
+    // Search Section Description
+    $name = 'theme_compecer/searchsectiondesc';
+    $title = get_string('searchsectiondesc', 'theme_compecer');
+    $description = get_string('searchsectiondescdesc', 'theme_compecer');
+    $default = get_string('searchsectiondescdefault', 'theme_compecer');
+    $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+    $page->add($setting);
+
+    // Categories Section Background Color
+    $name = 'theme_compecer/categoriesbgcolor';
+    $title = get_string('categoriesbgcolor', 'theme_compecer');
+    $description = get_string('categoriesbgcolordesc', 'theme_compecer');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '#f8f9fa');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
