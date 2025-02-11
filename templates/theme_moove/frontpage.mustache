@@ -18,49 +18,59 @@
     @template theme_moove/frontpage
     Moodle frontpage template.
 }}
+
 {{> theme_moove/head }}
 
 <body {{{ bodyattributes }}}>
 {{> core/local/toast/wrapper}}
+
 <div id="page-wrapper" class="d-print-block">
     {{{ output.standard_top_of_body_html }}}
     {{> theme_moove/navbar }}
 
     <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container bg-white">
+
         <!-- Slider Section -->
         {{#slidercount}}
-        <section id="mooveslideshow" class="position-relative {{#isloggedin}}slider-logged-in{{/isloggedin}}">
+        <section id="mooveslideshow"
+                 class="position-relative animate-section {{#isloggedin}}slider-logged-in{{/isloggedin}} {{^hasanymobileimage}}d-none d-md-block{{/hasanymobileimage}}">
             <div id="frontpage-carousel" class="carousel slide" data-ride="carousel">
                 {{^slidersingleslide}}
                 <ol class="carousel-indicators">
                     {{#slides}}
-                        <li data-target="#frontpage-carousel" data-slide-to="{{{key}}}" {{#active}}class="active"{{/active}}></li>
+                    <li data-target="#frontpage-carousel" data-slide-to="{{{key}}}"
+                        {{#active}}class="active"{{/active}}>
+                    </li>
                     {{/slides}}
                 </ol>
                 {{/slidersingleslide}}
+
                 <div class="carousel-inner">
                     {{#slides}}
-                        <div class="carousel-item {{#active}}active{{/active}}">
-                            <div class="carousel-image-wrapper">
-                                <!-- Imagen Desktop -->
-                                <img src="{{{image}}}" alt="{{{slidertitle}}}" class="carousel-image carousel-image-desktop">
-                                <!-- Imagen Mobile -->
-                                {{#mobile_image}}
-                                    <img src="{{{mobile_image}}}" alt="{{{slidertitle}}}" class="carousel-image carousel-image-mobile">
-                                {{/mobile_image}}
-                                {{^mobile_image}}
-                                    <img src="{{{image}}}" alt="{{{slidertitle}}}" class="carousel-image carousel-image-mobile">
-                                {{/mobile_image}}
-                            </div>
-                            {{#hascaption}}
-                                <div class="carousel-caption d-none d-md-block">
-                                    {{#title}}<h2 class="display-4 text-white">{{{.}}}</h2>{{/title}}
-                                    {{#caption}}<div class="lead text-white">{{{.}}}</div>{{/caption}}
-                                </div>
-                            {{/hascaption}}
+                    <div class="carousel-item {{#active}}active{{/active}}">
+                        <div class="carousel-image-wrapper">
+                            <!-- Imagen de escritorio (se muestra en >= md) -->
+                            <img src="{{{image}}}" alt="{{{slidertitle}}}"
+                                 class="carousel-image carousel-image-desktop d-none d-md-block">
+
+                            <!-- Imagen móvil (se muestra en < md), solo si existe mobile_image -->
+                            {{#mobile_image}}
+                            <img src="{{{mobile_image}}}" alt="{{{slidertitle}}}"
+                                 class="carousel-image carousel-image-mobile d-block d-md-none">
+                            {{/mobile_image}}
                         </div>
+
+                        {{#hascaption}}
+                        <!-- Caption (solo se muestra en escritorio, ajusta si deseas otra lógica) -->
+                        <div class="carousel-caption d-none d-md-block">
+                            {{#title}}<h2 class="display-4 text-white">{{{.}}}</h2>{{/title}}
+                            {{#caption}}<div class="lead text-white">{{{.}}}</div>{{/caption}}
+                        </div>
+                        {{/hascaption}}
+                    </div>
                     {{/slides}}
                 </div>
+
                 {{^slidersingleslide}}
                 <a class="carousel-control-prev" href="#frontpage-carousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -78,11 +88,13 @@
         <!-- About Section -->
         {{#aboutsection}}
         <section id="about-section" class="py-5 animate-section">
-            <div class="container">
-                <div class="about-content-wrapper">
-                    <h2 class="section-heading mb-4">{{{abouttitle}}}</h2>
-                    <div class="section-content">
-                        {{{aboutcontent}}}
+            <div class="container text-center">
+                <div class="row justify-content-center">
+                    <div class="col-12 about-content-container p-4">
+                            <h2 class="section-heading mb-4">{{{abouttitle}}}</h2>
+                            <div class="section-content">
+                                {{{aboutcontent}}}
+                            </div>
                     </div>
                 </div>
             </div>
@@ -91,19 +103,21 @@
 
         <!-- Career Boxes Section -->
         {{#careerboxes}}
-        <section id="career-section" class="py-5 bg-light animate-section">
+        <section id="career-section" class="py-5 animate-section">
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-8 text-center">
-                        <h2 class="section-heading">{{#str}}careersection_title, theme_compecer{{/str}}</h2>
+                        <h2 class="section-heading text-white">
+                            {{#str}}careersection_title, theme_compecer{{/str}}
+                        </h2>
                     </div>
                 </div>
                 <div class="row">
                     {{#boxes}}
                     <div class="col-md-4 mb-4">
-                        <div class="career-box text-center h-100 p-4 bg-white rounded shadow-sm">
+                        <div class="career-box text-center h-100 p-4 rounded shadow-sm">
                             <div class="icon-wrapper mb-4">
-                                <i class="fas fa-{{{icon}}} fa-3x text-primary"></i>
+                                <i class="fas fa-{{{icon}}} fa-3x"></i>
                             </div>
                             <h3 class="h4 mb-3">{{{title}}}</h3>
                             <div class="description">
@@ -132,11 +146,11 @@
 
         <!-- Search and Categories Section -->
         {{#hassearchcategories}}
-        <section id="search-categories" class="py-5 animate-section" style="background-color: {{{categoriesbgcolor}}}">
-            <div class="container">
+        <section id="search-categories" class="py-5 animate-section">
+            <div class="container-fluid">
                 <!-- Search Box -->
                 <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6">
+                    <div class="col-md-12 col-lg-6">
                         <div class="search-box mb-5">
                             <h2 class="section-heading text-center mb-4">{{{searchsectiontitle}}}</h2>
                             {{#searchsectiondesc}}
@@ -144,9 +158,9 @@
                             {{/searchsectiondesc}}
                             <form class="search-form" action="{{config.wwwroot}}/course/search.php" method="get">
                                 <div class="input-group">
-                                    <input type="text" 
-                                           class="form-control form-control-lg" 
-                                           name="q" 
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           name="q"
                                            placeholder="{{#str}}searchcourses, theme_compecer{{/str}}"
                                            aria-label="{{#str}}searchcourses, theme_compecer{{/str}}">
                                     <div class="input-group-append">
@@ -161,30 +175,15 @@
                     </div>
                 </div>
 
-                <!-- Categories Grid -->
-                <div class="categories-section">
-                    <h3 class="text-center mb-4">{{#str}}browsecategories, theme_compecer{{/str}}</h3>
-                    <div class="row">
-                        {{#categories}}
-                        <div class="col-md-4 mb-4">
-                            <div class="category-box h-100 bg-white rounded shadow-sm p-4">
-                                <h4 class="h5 mb-3">
-                                    <a href="{{{url}}}" class="text-decoration-none">
-                                        {{{name}}}
-                                    </a>
-                                </h4>
-                                {{#description}}
-                                <p class="small text-muted mb-2">{{{description}}}</p>
-                                {{/description}}
-                                <div class="course-count">
-                                    <small class="text-primary">
-                                        {{{coursecounttext}}}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                        {{/categories}}
+                <!-- Category Buttons -->
+                <div class="row justify-content-center">
+                    {{#categories}}
+                    <div class="col-auto mb-2">
+                        <a href="{{{url}}}" class="btn btn-tertiary">
+                            {{{name}}}
+                        </a>
                     </div>
+                    {{/categories}}
                 </div>
             </div>
         </section>
@@ -209,19 +208,21 @@ require(['jquery', 'theme_boost/bootstrap/carousel'], function($) {
         pause: 'hover'
     });
 
-    // Función para manejar las animaciones de entrada
+    // Función para manejar las animaciones con IntersectionObserver
     function handleScrollAnimations() {
         const animateSections = document.querySelectorAll('.animate-section');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    // Para no re-animar al hacer scroll atrás
+                    observer.unobserve(entry.target);
                 }
             });
         }, {
             threshold: 0.15,
-            rootMargin: '0px'
+            rootMargin: '0px 0px -50px 0px'
         });
 
         animateSections.forEach(section => {
@@ -229,7 +230,14 @@ require(['jquery', 'theme_boost/bootstrap/carousel'], function($) {
         });
     }
 
-    // Inicializar animaciones
-    handleScrollAnimations();
+    // Ejecutar al cargar el DOM
+    $(document).ready(function() {
+        handleScrollAnimations();
+    });
+
+    // También al cargar la ventana (por si hay contenido dinámico)
+    $(window).on('load', function() {
+        handleScrollAnimations();
+    });
 });
 {{/js}}
