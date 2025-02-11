@@ -41,6 +41,7 @@ if ($courseindexopen) {
 
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
+
 if (!$hasblocks) {
     $blockdraweropen = false;
 }
@@ -157,22 +158,35 @@ if (!empty($PAGE->theme->settings->enablecareerboxes)) {
     $templatecontext['boxes'] = $boxes;
 }
 
-// FAQ section
-if (!empty($PAGE->theme->settings->faqcount)) {
-    $templatecontext['faqenabled'] = true;
-    $faqs = [];
-    
-    for ($i = 1; $i <= 5; $i++) {
-        if (!empty($PAGE->theme->settings->{"faq{$i}question"})) {
-            $faqs[] = [
-                'id' => $i,
-                'question' => format_text($PAGE->theme->settings->{"faq{$i}question"} ?? '', FORMAT_HTML),
-                'answer' => format_text($PAGE->theme->settings->{"faq{$i}answer"} ?? '', FORMAT_HTML)
-            ];
+// Categories section
+if (!empty($PAGE->theme->settings->enablecategories)) {
+    $selectedcats = $PAGE->theme->settings->selectedcategories;
+    if (!empty($selectedcats)) {
+        $selectedcats = explode(',', $selectedcats);
+        $categories = [];
+        
+        foreach ($selectedcats as $catid) {
+            $category = core_course_category::get($catid, IGNORE_MISSING);
+            if ($category) {
+                $coursecount = $category->get_courses_count();
+                $categories[] = [
+                    'id' => $category->id,
+                    'name' => format_text($category->get_formatted_name(), FORMAT_HTML),
+                    'description' => format_text($category->description, FORMAT_HTML),
+                    'coursecount' => $coursecount,
+                    'coursecounttext' => get_string('categorycount', 'theme_compecer', $coursecount),
+                    'url' => new moodle_url('/course/index.php', ['categoryid' => $category->id])
+                ];
+            }
         }
-    }
-    if (count($faqs)) {
-        $templatecontext['faq'] = $faqs;
+        
+        if (!empty($categories)) {
+            $templatecontext['hassearchcategories'] = true;
+            $templatecontext['categories'] = $categories;
+            $templatecontext['searchsectiontitle'] = format_text($PAGE->theme->settings->searchsectiontitle ?? get_string('searchsectiontitledefault', 'theme_compecer'), FORMAT_HTML);
+            $templatecontext['searchsectiondesc'] = format_text($PAGE->theme->settings->searchsectiondesc ?? get_string('searchsectiondescdefault', 'theme_compecer'), FORMAT_HTML);
+            $templatecontext['categoriesbgcolor'] = $PAGE->theme->settings->categoriesbgcolor ?? '#f8f9fa';
+        }
     }
 }
 
