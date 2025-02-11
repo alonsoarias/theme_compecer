@@ -1,8 +1,10 @@
-nav.navbar .navbar-brand .logo img {
+/* -------------------------------------------------------------------------
+   Ajustes generales (navbar, login, drawer, etc.)
+   ------------------------------------------------------------------------- */
+   nav.navbar .navbar-brand .logo img {
     width: auto;
     height: 64px;
 }
-
 
 #nav-drawer.closed:not(:hover) {
     opacity: 1;
@@ -76,6 +78,9 @@ h4,
     font-weight: 600px;
 }
 
+/* -------------------------------------------------------------------------
+   Página de login
+   ------------------------------------------------------------------------- */
 .my-fullwidthloginstyle {
     background-color: white;
 }
@@ -95,7 +100,8 @@ h4,
     background-color: $color-secondary;
     font-size: 15px;
 }
-.my-credit-footer-wrapper{
+
+.my-credit-footer-wrapper {
     background-color: $my-blue3;
     font-size: 15px;
 }
@@ -107,7 +113,7 @@ h4,
 #top-footer {
     background-color: $color-secondary;
     color: white;
-    margin:0 -15px;
+    margin: 0 -15px;
 }
 
 #nav-drawer {
@@ -123,13 +129,9 @@ h4,
 }
 
 #nav-drawer .list-group .list-group-item a {
-    /* text-transform: uppercase; */
     font-size: 105%;
-    /* font-weight: bold; */
     line-height: auto;
 }
-
-
 
 .dropdown-item:active,
 .dropdown-item:hover,
@@ -173,8 +175,7 @@ a.my-credit-link:not(:hover) {
     color: white;
 }
 
-
-#page-login-index .my-fullwidthloginstyle+#my-custom-footer-wrapper {
+#page-login-index .my-fullwidthloginstyle + #my-custom-footer-wrapper {
     background-color: $my-negro;
 }
 
@@ -186,6 +187,9 @@ a.my-credit-link:not(:hover) {
     min-width: calc(100vh - 196px);
 }
 
+/* -------------------------------------------------------------------------
+   Ajustes en dashboard, tarjetas y layouts
+   ------------------------------------------------------------------------- */
 #page-my-index .admininfos {
     margin-top: 25px;
 }
@@ -293,7 +297,7 @@ body.compecer-co {
         background-color: $color-secondary;
     }
 
-    #nav-drawer .list-group+.list-group {
+    #nav-drawer .list-group + .list-group {
         border-color: rgba(10, 10, 10, 0.4);
     }
 
@@ -308,7 +312,6 @@ body.compecer-co {
     .usermenu a.dropdown-toggle {
         color: $my-negro;
     }
-
 
     #sidepreopen-control {
         background-color: $my-blue;
@@ -336,6 +339,7 @@ body.compecer-co {
         text-shadow: none;
         font-weight: 500;
     }
+
     body#page-login-index a {
         color: $my-gris;
     }
@@ -372,28 +376,24 @@ body.compecer-co {
     .h6 {
         font-family: "Roboto", sans-serif;
         font-weight: 400;
-        /* color: $my-negro; */
     }
 
     h1,
     .h1 {
         font-weight: 700;
         font-size: 36px;
-        /* color: $my-blue; */
     }
 
     h2,
     .h2 {
         font-weight: 700;
         font-size: 30px;
-        /* color: $my-amarillo; */
     }
 
     h3,
     .h3 {
         font-weight: 700;
         font-size: 24px;
-        /* color: $my-negro; */
     }
 
     h4,
@@ -427,6 +427,9 @@ body.compecer-co {
     }
 }
 
+/* -------------------------------------------------------------------------
+   Ajustes de login a pantalla completa
+   ------------------------------------------------------------------------- */
 .my-fullwidthloginstyle {
     .my-customloginbox-wrapper {
         padding-bottom: 40px;
@@ -446,7 +449,7 @@ body.compecer-co {
         width: 100%;
         object-fit: contain;
         max-height: 100vh;
-        max-width: 900px
+        max-width: 900px;
     }
 
     .my-loginbg_image-container {
@@ -477,7 +480,7 @@ body.compecer-co {
         background: -moz-linear-gradient(110deg, white 52%, #f9b214 52%);
         background: -webkit-linear-gradient(110deg, white 52%, #f9b214 53%);
         background: linear-gradient(110deg, white 52%, #f9b214 52%);
-        filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#f9b214", GradientType=1);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#f9b214", GradientType=1);
     }
 
     .my-loginbox-wrapper .forgetpass {
@@ -485,30 +488,32 @@ body.compecer-co {
     }
 }
 
-.dashboard-card .dashboard-card-img .course-category{
+.dashboard-card .dashboard-card-img .course-category {
     background-color: $my-rojo;
 }
 
-.dashboard-card{
+.dashboard-card {
     border: 0.5px solid $my-blue3;
 }
-.pagelayout-mydashboard .card{
+
+.pagelayout-mydashboard .card {
     border-radius: 0;
 }
 
+/* -------------------------------------------------------------------------
+   Media queries específicos para login
+   ------------------------------------------------------------------------- */
 @media (min-width: 992px) {
     #page-login-index a.my-credit-link {
         white-space: pre-line;
         display: inline-block;
     }
-
 }
 
 @media (min-width: 1200px) {
     #page-login-index.moove-login .my-fullwidthloginstyle .loginpanel .card-block .form .welcome {
         margin-top: 25px;
     }
-
 }
 
 @media (min-width: 1200px) and (min-height: 748px) {
@@ -517,14 +522,15 @@ body.compecer-co {
         min-height: $my-loginfooterheight;
     }
 
-    .my-fullwidthloginstyle>div {
+    .my-fullwidthloginstyle > div {
         min-height: 748px;
         min-height: calc(100vh - #{$my-loginfooterheight});
     }
-
 }
 
-// Keyframes para animaciones
+/* -------------------------------------------------------------------------
+   Animaciones y keyframes generales
+   ------------------------------------------------------------------------- */
 @keyframes fadeInScale {
     from {
         opacity: 0;
@@ -558,7 +564,9 @@ body.compecer-co {
     }
 }
 
-// Estilos del breadcrumb
+/* -------------------------------------------------------------------------
+   Estilos del breadcrumb
+   ------------------------------------------------------------------------- */
 .breadcrumb-header {
     position: relative;
     padding: 100px 0 50px;
@@ -575,7 +583,7 @@ body.compecer-co {
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)); // Gradiente más sutil
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
         animation: fadeInScale 0.6s ease-out forwards;
     }
 
@@ -591,11 +599,11 @@ body.compecer-co {
         text-align: center;
 
         h2 {
-            color: #fff !important; // Forzar color blanco
+            color: #fff !important;
             font-size: 2.5rem;
             font-weight: 600;
             margin: 0 0 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); // Sombra más pronunciada
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             animation: slideInFromBottom 0.6s ease-out forwards;
             animation-delay: 0.2s;
             opacity: 0;
@@ -603,10 +611,10 @@ body.compecer-co {
         }
 
         .description {
-            color: #fff !important; // Forzar color blanco
+            color: #fff !important;
             font-size: 1.1rem;
             margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); // Sombra más pronunciada
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
             animation: slideInFromBottom 0.6s ease-out forwards;
             animation-delay: 0.3s;
             opacity: 0;
@@ -615,7 +623,6 @@ body.compecer-co {
             margin-right: auto;
         }
 
-        // Asegurar que todos los textos dentro sean blancos
         * {
             color: #fff !important;
         }
@@ -637,11 +644,11 @@ body.compecer-co {
             list-style: none;
 
             .breadcrumb-item {
-                color: #fff !important; // Forzar color blanco
+                color: #fff !important;
                 font-size: 0.95rem;
                 display: flex;
                 align-items: center;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); // Sombra para legibilidad
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 
                 &.active {
                     color: #fff !important;
@@ -650,7 +657,6 @@ body.compecer-co {
 
                 + .breadcrumb-item {
                     padding-left: 0.8rem;
-
                     &::before {
                         content: "/";
                         display: inline-block;
@@ -728,8 +734,9 @@ body.compecer-co {
     }
 }
 
-
-/* --------------- Estilos del Carrusel --------------- */
+/* -------------------------------------------------------------------------
+   Carrusel (slider) en frontpage
+   ------------------------------------------------------------------------- */
 #mooveslideshow {
     position: relative;
     width: 100%;
@@ -737,7 +744,6 @@ body.compecer-co {
     overflow: hidden;
 }
 
-/* Ajuste para usuarios logueados */
 #mooveslideshow.slider-logged-in {
     margin-top: 20px;
 }
@@ -771,7 +777,6 @@ body.compecer-co {
     border-radius: 8px;
 }
 
-/* Controles del carrusel */
 .carousel-control-prev,
 .carousel-control-next {
     width: 5%;
@@ -789,60 +794,110 @@ body.compecer-co {
     margin: 0 5px;
 }
 
-/* --------------- Estilos de Animación --------------- */
-.animate-section {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease-out;
-}
+/* -------------------------------------------------------------------------
+   Animaciones de entrada (IntersectionObserver + CSS)
+   ------------------------------------------------------------------------- */
 
-.animate-section.visible {
+/* Slider (#mooveslideshow) - aparecer desde arriba */
+#mooveslideshow.animate-section {
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: all 0.7s ease-out;
+}
+#mooveslideshow.animate-section.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* --------------- Estilos de la Sección About --------------- */
+/* About (#about-section) - aparecer desde la izquierda */
+#about-section.animate-section {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.7s ease-out;
+}
+#about-section.animate-section.visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Career (#career-section) - escala de 0.9 a 1 */
+#career-section.animate-section {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.7s ease-out;
+}
+#career-section.animate-section.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Main content anchor (#topofscroll) - aparecer desde abajo */
+#topofscroll.animate-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+}
+#topofscroll.animate-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Search & categories (#search-categories) - aparecer desde abajo */
+#search-categories.animate-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+}
+#search-categories.animate-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* -------------------------------------------------------------------------
+   Sección ABOUT
+   ------------------------------------------------------------------------- */
 #about-section {
+    position: relative;
+    background-color: transparent !important; /* Sin fondo en la sección */
+    overflow: hidden;
     padding: 4rem 0;
+    text-align: center;
 }
 
-#about-section .about-content-wrapper {
-    background-color: #84848a;
-    border-radius: 16px;
-    padding: 3rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transform: translateY(30px);
-    opacity: 0;
-    transition: all 0.6s ease-out;
-}
-
-#about-section .about-content-wrapper.visible {
-    transform: translateY(0);
-    opacity: 1;
+#about-section .about-content-container {
+    background-color: #d8d8d8; /* Fondo interno */
+    padding: 2rem;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 #about-section .section-heading {
+    color: #90a1c2;
     font-size: 2.5rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    color: #FFD700;
 }
 
 #about-section .section-content {
+    color: #666;
     font-size: 1.1rem;
-    line-height: 1.7;
-    color: #FFFFFF;
+    line-height: 1.8;
 }
 
-/* --------------- Estilos de Career Boxes --------------- */
+/* -------------------------------------------------------------------------
+   Sección CAREER BOXES
+   ------------------------------------------------------------------------- */
 #career-section {
-    background-color: #f8f9fa;
+    background-color: #365ba3 !important; /* Fondo forzado */
     padding: 4rem 0;
 }
 
 .career-box {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(0,0,0,0.1);
+    background-color: #365ba3 !important;
+    color: #fff !important;
+    border: none;
 }
 
 .career-box:hover {
@@ -850,164 +905,27 @@ body.compecer-co {
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.career-box .icon-wrapper {
-    margin-bottom: 1.5rem;
-}
-
-.career-box .icon-wrapper i {
-    color: #5AA9E6;
-    transition: transform 0.3s ease;
-}
-
-.career-box:hover .icon-wrapper i {
-    transform: scale(1.1);
+.career-box .icon-wrapper i,
+.career-box .icon-wrapper img {
+    color: #fff !important;
+    fill: #fff !important; /* Para SVG */
 }
 
 .career-box .h4 {
-    color: #455a64;
+    color: #fff !important;
     font-weight: 600;
 }
 
 .career-box .description {
-    color: #666;
+    color: #fff !important;
     line-height: 1.6;
 }
 
-/* --------------- Estilos del FAQ --------------- */
-#faq {
-    background-color: #f8f9fa;
-    padding: 4rem 0;
-}
-
-#faq .card {
-    border: none;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-#faq .card-header {
-    background-color: #fff;
-    border: none;
-    padding: 1rem;
-}
-
-#faq .btn-link {
-    color: #455a64;
-    font-weight: 600;
-    text-decoration: none;
-    width: 100%;
-    text-align: left;
-    padding: 0;
-}
-
-#faq .btn-link:hover,
-#faq .btn-link:focus {
-    color: #5AA9E6;
-    text-decoration: none;
-}
-
-#faq .card-body {
-    padding: 1.5rem;
-    background-color: #fff;
-    color: #666;
-}
-
-/* --------------- Media Queries --------------- */
-@media (max-width: 768px) {
-    #mooveslideshow,
-    .carousel-image-wrapper {
-        height: 400px;
-    }
-
-    .carousel-image-mobile {
-        display: block !important;
-    }
-    
-    .carousel-image-desktop {
-        display: none !important;
-    }
-
-    #about-section .about-content-wrapper {
-        padding: 2rem;
-    }
-
-    #about-section .section-heading {
-        font-size: 2rem;
-    }
-
-    .career-box {
-        margin-bottom: 1.5rem;
-    }
-}
-
-@media (max-width: 576px) {
-    #mooveslideshow,
-    .carousel-image-wrapper {
-        height: 300px;
-    }
-
-    .carousel-caption h2 {
-        font-size: 1.5rem;
-    }
-
-    .carousel-caption .lead {
-        font-size: 1rem;
-    }
-
-    #about-section {
-        padding: 2rem 0;
-    }
-
-    .career-box {
-        margin-bottom: 1rem;
-    }
-}
-
-@media (min-width: 769px) {
-    .carousel-image-mobile {
-        display: none !important;
-    }
-    
-    .carousel-image-desktop {
-        display: block !important;
-    }
-}
-
-/* --------------- Utilidades --------------- */
-.shadow-hover {
-    transition: box-shadow 0.3s ease;
-}
-
-.shadow-hover:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Ajustes de scroll suave */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Ajustes de Accesibilidad */
-.btn:focus,
-.btn-link:focus {
-    outline: 2px solid #5AA9E6;
-    outline-offset: 2px;
-}
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    border: 0;
-}
-
-/* Search and Categories Section Styles */
+/* -------------------------------------------------------------------------
+   Sección de búsqueda y categorías
+   ------------------------------------------------------------------------- */
 #search-categories {
+    background-color: transparent !important; /* Sin fondo */
     transition: background-color 0.3s ease;
 }
 
@@ -1050,135 +968,110 @@ html {
     transform: translateY(-1px);
 }
 
-/* Categories Grid */
-.categories-section {
-    margin-top: 2rem;
+/* Botón terciario de ejemplo */
+.btn-tertiary {
+    background-color: #8b5ad1;
+    color: #fff !important;
+    border: 1px solid #8b5ad1;
+    font-weight: 600;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.btn-tertiary:hover {
+    background-color: #7a4fba;
+    border-color: #7a4fba;
 }
 
-.category-box {
-    position: relative;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.category-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.category-box h4 {
-    font-size: 1.25rem;
-    line-height: 1.4;
-    margin-bottom: 0.75rem;
-}
-
-.category-box h4 a {
-    color: #455a64;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.category-box h4 a:hover {
-    color: var(--primary);
-}
-
-.category-box .description {
-    flex-grow: 1;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #666;
-    margin-bottom: 1rem;
-}
-
-.course-count {
-    font-size: 0.9rem;
-    color: var(--primary);
-    padding-top: 0.5rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/* Responsive Adjustments */
+/* -------------------------------------------------------------------------
+   Ajustes responsivos para frontpage
+   ------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-    .search-form input {
-        padding: 1rem;
+    #mooveslideshow,
+    .carousel-image-wrapper {
+        height: 400px;
+    }
+
+    .carousel-image-mobile {
+        display: block !important;
+    }
+
+    .carousel-image-desktop {
+        display: none !important;
+    }
+
+    #about-section {
+        padding: 2rem 0;
+    }
+
+    #about-section .section-heading {
+        font-size: 2rem;
+    }
+
+    .career-box {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #mooveslideshow,
+    .carousel-image-wrapper {
+        height: 300px;
+    }
+
+    .carousel-caption h2 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-caption .lead {
         font-size: 1rem;
     }
 
-    .category-box {
-        margin-bottom: 1.5rem;
-    }
-
-    .category-box h4 {
-        font-size: 1.1rem;
-    }
-
-    .search-box {
-        padding: 0 1rem;
+    .career-box {
+        margin-bottom: 1rem;
     }
 }
 
-/* Animation */
-.category-box {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+@media (min-width: 769px) {
+    .carousel-image-mobile {
+        display: none !important;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .carousel-image-desktop {
+        display: block !important;
     }
 }
 
-/* Utility Classes for Categories Section */
-.section-heading {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
+/* -------------------------------------------------------------------------
+   Utilidades y accesibilidad general
+   ------------------------------------------------------------------------- */
+html {
+    scroll-behavior: smooth;
 }
 
-.search-section-description {
-    color: #666;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    line-height: 1.6;
-}
-
-/* Accessibility Enhancements */
-.search-form input:focus,
-.category-box:focus-within {
-    outline: 2px solid var(--primary);
+.btn:focus,
+.btn-link:focus {
+    outline: 2px solid #5AA9E6;
     outline-offset: 2px;
 }
 
-.search-form .btn:focus {
-    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
 }
 
-/* Dark Mode Support */
+.shadow-hover {
+    transition: box-shadow 0.3s ease;
+}
+
+.shadow-hover:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
 @media (prefers-color-scheme: dark) {
-    .category-box {
-        background-color: #2c3e50;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .category-box h4 a {
-        color: #fff;
-    }
-
-    .category-box .description {
-        color: #ddd;
-    }
-
-    .course-count {
-        border-top-color: rgba(255, 255, 255, 0.1);
-    }
+    /* Opcional: ajustes para modo oscuro */
 }
