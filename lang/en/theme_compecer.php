@@ -55,6 +55,14 @@ $string['generalnotice'] = 'Notice text';
 $string['generalnoticedesc'] = 'Text to show inside the alert box';
 $string['generalnotice_create'] = 'Set a notice';
 
+// Section visibility toggles
+$string['enable_slider'] = 'Enable slider section';
+$string['enable_sliderdesc'] = 'Enable or disable the slider section on the frontpage';
+$string['enable_about'] = 'Enable about section';
+$string['enable_aboutdesc'] = 'Enable or disable the about section on the frontpage';
+$string['enable_search_categories'] = 'Enable search and categories section';
+$string['enable_search_categoriesdesc'] = 'Enable or disable the search and categories section on the frontpage';
+
 // Chat settings
 $string['enable_chat'] = 'Enable chat widget';
 $string['enable_chatdesc'] = 'Enable Tawk.to chat widget integration';
@@ -77,18 +85,6 @@ $string['loginbg_imagedesc'] = 'Upload a background image for the login page';
 $string['loginbg_color'] = 'Login Background Color';
 $string['loginbg_colordesc'] = 'Background color in login page';
 $string['credit'] = 'Theme created by <a target="_blank" class="my-credit-link" href="http://ingeweb.co/">www.ingeweb.co</a>';
-
-// About section
-$string['abouttext'] = 'About Content';
-$string['abouttextdesc'] = 'Enter the content for the about section';
-$string['abouttitle'] = 'About';
-$string['hideabouttext'] = 'Hide About Text';
-$string['hideabouttextdesc'] = 'Choose whether to show or hide the about text section.';
-$string['show'] = 'Show';
-$string['hide'] = 'Hide';
-
-// Cache strings
-$string['cachedef_fontawesomemooveiconmapping'] = 'Theme font icon mapping';
 
 // Tab names
 $string['generalsettings'] = 'General Settings';
@@ -122,6 +118,8 @@ $string['aboutcontentdefault'] = 'Add your organization description here';
 $string['careersection_title'] = 'Invierte en tu carrera';
 $string['enablecareerboxes'] = 'Enable Career Boxes';
 $string['enablecareerboxesdesc'] = 'Enable or disable the career boxes section';
+$string['careerboxesbgcolor'] = 'Career section background color';
+$string['careerboxesbgcolordesc'] = 'Set the background color for the career section';
 $string['careerboxicon'] = 'Box {$a} Icon';
 $string['careerboxicondesc'] = 'Select an icon for this career box';
 $string['careerboxtitle'] = 'Box {$a} Title';
@@ -153,14 +151,11 @@ $string['icon_award'] = 'Award';
 $string['icon_usergraduate'] = 'Graduate';
 $string['icon_teacher'] = 'Teacher';
 
-// Nuevas cadenas para Search and Categories
+// Search and Categories Strings
 $string['categoriessettings'] = 'Categories Settings';
-$string['enablecategories'] = 'Enable Categories Section';
-$string['enablecategoriesdesc'] = 'Enable or disable the categories section on the frontpage';
 $string['selectedcategories'] = 'Selected Categories';
 $string['selectedcategoriesdesc'] = 'Choose which categories to display in the frontpage';
 $string['searchcourses'] = 'Search courses';
-$string['browsecategories'] = 'Browse by Category';
 $string['searchsectiontitle'] = 'Search Section Title';
 $string['searchsectiontitledesc'] = 'Title for the search section';
 $string['searchsectiontitledefault'] = 'Find Your Course';
@@ -169,5 +164,6 @@ $string['searchsectiondescdesc'] = 'Description text for the search section';
 $string['searchsectiondescdefault'] = 'Search through our wide range of courses';
 $string['categoriesbgcolor'] = 'Categories Background Color';
 $string['categoriesbgcolordesc'] = 'Background color for the categories section';
-$string['nocategories'] = 'No categories selected';
-$string['categorycount'] = '{$a} Courses';
+
+// Cache strings
+$string['cachedef_fontawesomemooveiconmapping'] = 'Theme font icon mapping';
