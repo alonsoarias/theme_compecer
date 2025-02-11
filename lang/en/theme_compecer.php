@@ -152,3 +152,22 @@ $string['icon_university'] = 'University';
 $string['icon_award'] = 'Award';
 $string['icon_usergraduate'] = 'Graduate';
 $string['icon_teacher'] = 'Teacher';
+
+// Nuevas cadenas para Search and Categories
+$string['categoriessettings'] = 'Categories Settings';
+$string['enablecategories'] = 'Enable Categories Section';
+$string['enablecategoriesdesc'] = 'Enable or disable the categories section on the frontpage';
+$string['selectedcategories'] = 'Selected Categories';
+$string['selectedcategoriesdesc'] = 'Choose which categories to display in the frontpage';
+$string['searchcourses'] = 'Search courses';
+$string['browsecategories'] = 'Browse by Category';
+$string['searchsectiontitle'] = 'Search Section Title';
+$string['searchsectiontitledesc'] = 'Title for the search section';
+$string['searchsectiontitledefault'] = 'Find Your Course';
+$string['searchsectiondesc'] = 'Search Section Description';
+$string['searchsectiondescdesc'] = 'Description text for the search section';
+$string['searchsectiondescdefault'] = 'Search through our wide range of courses';
+$string['categoriesbgcolor'] = 'Categories Background Color';
+$string['categoriesbgcolordesc'] = 'Background color for the categories section';
+$string['nocategories'] = 'No categories selected';
+$string['categorycount'] = '{$a} Courses';
