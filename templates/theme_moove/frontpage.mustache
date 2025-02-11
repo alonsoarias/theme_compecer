@@ -130,35 +130,65 @@
             </div>
         </div>
 
-        <!-- FAQ Section -->
-        {{#faqenabled}}
-        <section id="faq" class="py-5 bg-light animate-section">
+        <!-- Search and Categories Section -->
+        {{#hassearchcategories}}
+        <section id="search-categories" class="py-5 animate-section" style="background-color: {{{categoriesbgcolor}}}">
             <div class="container">
-                <h2 class="text-center mb-5">{{#str}}faq, theme_moove{{/str}}</h2>
-                <div class="accordion" id="accordionFaq">
-                    {{#faq}}
-                        <div class="card shadow-sm mb-3">
-                            <div class="card-header bg-white" id="heading-{{{id}}}">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left text-decoration-none" type="button" 
-                                            data-toggle="collapse" data-target="#collapse-{{{id}}}" 
-                                            aria-expanded="false" aria-controls="collapse-{{{id}}}">
-                                        {{{question}}}
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapse-{{{id}}}" class="collapse" 
-                                 aria-labelledby="heading-{{{id}}}" data-parent="#accordionFaq">
-                                <div class="card-body">
-                                    {{{answer}}}
+                <!-- Search Box -->
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="search-box mb-5">
+                            <h2 class="section-heading text-center mb-4">{{{searchsectiontitle}}}</h2>
+                            {{#searchsectiondesc}}
+                            <p class="text-center mb-4">{{{searchsectiondesc}}}</p>
+                            {{/searchsectiondesc}}
+                            <form class="search-form" action="{{config.wwwroot}}/course/search.php" method="get">
+                                <div class="input-group">
+                                    <input type="text" 
+                                           class="form-control form-control-lg" 
+                                           name="q" 
+                                           placeholder="{{#str}}searchcourses, theme_compecer{{/str}}"
+                                           aria-label="{{#str}}searchcourses, theme_compecer{{/str}}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary btn-lg" type="submit">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                            <span class="sr-only">{{#str}}search{{/str}}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Grid -->
+                <div class="categories-section">
+                    <h3 class="text-center mb-4">{{#str}}browsecategories, theme_compecer{{/str}}</h3>
+                    <div class="row">
+                        {{#categories}}
+                        <div class="col-md-4 mb-4">
+                            <div class="category-box h-100 bg-white rounded shadow-sm p-4">
+                                <h4 class="h5 mb-3">
+                                    <a href="{{{url}}}" class="text-decoration-none">
+                                        {{{name}}}
+                                    </a>
+                                </h4>
+                                {{#description}}
+                                <p class="small text-muted mb-2">{{{description}}}</p>
+                                {{/description}}
+                                <div class="course-count">
+                                    <small class="text-primary">
+                                        {{{coursecounttext}}}
+                                    </small>
                                 </div>
                             </div>
                         </div>
-                    {{/faq}}
+                        {{/categories}}
+                    </div>
                 </div>
             </div>
         </section>
-        {{/faqenabled}}
+        {{/hassearchcategories}}
 
         {{> theme_moove/footer }}
     </div>
