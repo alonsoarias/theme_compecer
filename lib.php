@@ -129,8 +129,18 @@ function theme_compecer_pluginfile($course, $cm, $context, $filearea, $args, $fo
  * @param theme_config $theme The theme config object.
  * @return string
  */
-function theme_compecer_get_main_scss_content($theme) {
+function theme_compecer_get_main_scss_content($theme)
+{
     global $CFG;
+
+    // compecer scss.
+    $compecer_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/_variables.scss');
+    $custom_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/custom_variables.scss');
+    $compecer = file_get_contents($CFG->dirroot . '/theme/compecer/scss/compecer.scss');
+    $custom = file_get_contents($CFG->dirroot . '/theme/compecer/style/custom.css');
+
+    // Combine them with moove.
+    return $compecer_variables . "\n" . $custom_variables . "\n" . theme_moove_get_main_scss_content($theme) . "\n" . $compecer . "\n" . $custom;
 
     $scss = '';
     $filename = !empty($theme->settings->preset) ? $theme->settings->preset : null;
@@ -138,21 +148,18 @@ function theme_compecer_get_main_scss_content($theme) {
 
     $context = context_system::instance();
     if ($filename == 'default.scss') {
+        // We still load the default preset files directly from the boost theme. No sense in duplicating them.
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
     } else if ($filename == 'plain.scss') {
+        // We still load the default preset files directly from the boost theme. No sense in duplicating them.
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/plain.scss');
     } else if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_moove', 'preset', 0, '/', $filename))) {
+        // This preset file was fetched from the file area for theme_moove and not theme_boost (see the line above).
         $scss .= $presetfile->get_content();
     } else {
         // Safety fallback - maybe new installs etc.
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
     }
-
-    // Compecer scss.
-    $compecer_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/_variables.scss');
-    $custom_variables = file_get_contents($CFG->dirroot . '/theme/compecer/scss/custom_variables.scss');
-    $compecer = file_get_contents($CFG->dirroot . '/theme/compecer/scss/compecer.scss');
-    $custom = file_get_contents($CFG->dirroot . '/theme/compecer/style/custom.css');
 
     // Moove scss.
     $moovevariables = file_get_contents($CFG->dirroot . '/theme/moove/scss/moove/_variables.scss');
