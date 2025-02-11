@@ -1,6 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-//
+// 
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -106,22 +106,35 @@ $templatecontext = [
 ];
 
 // Slider content
-if (!empty($PAGE->theme->settings->slidercount)) {
+if (!empty($PAGE->theme->settings->enable_slider) && !empty($PAGE->theme->settings->slidercount)) {
     $templatecontext['slidercount'] = true;
     $slides = [];
-    
+
+    // [CAMBIO] Variable para saber si hay al menos una imagen mobile.
+    $hasAnyMobileImage = false;
+
     for ($i = 1; $i <= $PAGE->theme->settings->slidercount; $i++) {
         $slidetitle = $PAGE->theme->settings->{"slidertitle{$i}"} ?? '';
         $slidercaption = $PAGE->theme->settings->{"slidercaption{$i}"} ?? '';
         $sliderimage = $PAGE->theme->setting_file_url("sliderimage{$i}", "sliderimage{$i}");
         $sliderimagemobile = $PAGE->theme->setting_file_url("sliderimage{$i}_mobile", "sliderimage{$i}_mobile");
-        
+
+        // Solo agregamos el slide si hay imagen de escritorio.
         if ($sliderimage) {
+            // [CAMBIO] Si hay imagen mobile, marcamos la bandera.
+            if ($sliderimagemobile) {
+                $hasAnyMobileImage = true;
+            }
+
+            // [CAMBIO] Evitamos fallback. 
+            // Es decir, si no hay sliderimagemobile, mobile_image quedará vacío (null).
+            // Con ello, en vistas móviles NO se mostrará la desktop.
+            
             $slides[] = [
                 'key' => $i - 1,
-                'active' => $i === 1,
+                'active' => ($i === 1),
                 'image' => $sliderimage,
-                'mobile_image' => $sliderimagemobile ?: $sliderimage,
+                'mobile_image' => $sliderimagemobile, // Null si no existe.
                 'slidertitle' => $slidetitle,
                 'title' => $slidetitle,
                 'caption' => $slidercaption,
@@ -129,22 +142,28 @@ if (!empty($PAGE->theme->settings->slidercount)) {
             ];
         }
     }
-    
+
     $templatecontext['slides'] = $slides;
-    $templatecontext['slidersingleslide'] = count($slides) === 1;
+    $templatecontext['slidersingleslide'] = (count($slides) === 1);
+
+    // [CAMBIO] Añadimos esta variable para que Mustache sepa si ocultar el carrusel en móvil.
+    $templatecontext['hasanymobileimage'] = $hasAnyMobileImage;
 }
 
 // About section
-if (!empty($PAGE->theme->settings->abouttitle) || !empty($PAGE->theme->settings->aboutcontent)) {
+if (!empty($PAGE->theme->settings->enable_about)) {
     $templatecontext['aboutsection'] = true;
-    $templatecontext['abouttitle'] = format_text($PAGE->theme->settings->abouttitle ?? '', FORMAT_HTML);
-    $templatecontext['aboutcontent'] = format_text($PAGE->theme->settings->aboutcontent ?? '', FORMAT_HTML);
+    $templatecontext['abouttitle'] = !empty($PAGE->theme->settings->abouttitle) ?
+        format_text($PAGE->theme->settings->abouttitle, FORMAT_HTML) : '';
+    $templatecontext['aboutcontent'] = !empty($PAGE->theme->settings->aboutcontent) ?
+        format_text($PAGE->theme->settings->aboutcontent, FORMAT_HTML) : '';
 }
 
 // Career boxes section
 if (!empty($PAGE->theme->settings->enablecareerboxes)) {
     $templatecontext['careerboxes'] = true;
-    
+    $templatecontext['careerboxesbgcolor'] = $PAGE->theme->settings->careerboxesbgcolor ?? '#365ba3';
+
     $boxes = [];
     for ($i = 1; $i <= 3; $i++) {
         if (!empty($PAGE->theme->settings->{"careerbox{$i}title"})) {
@@ -159,27 +178,24 @@ if (!empty($PAGE->theme->settings->enablecareerboxes)) {
 }
 
 // Categories section
-if (!empty($PAGE->theme->settings->enablecategories)) {
+if (!empty($PAGE->theme->settings->enable_search_categories) && !empty($PAGE->theme->settings->selectedcategories)) {
     $selectedcats = $PAGE->theme->settings->selectedcategories;
     if (!empty($selectedcats)) {
         $selectedcats = explode(',', $selectedcats);
         $categories = [];
-        
+
         foreach ($selectedcats as $catid) {
             $category = core_course_category::get($catid, IGNORE_MISSING);
             if ($category) {
-                $coursecount = $category->get_courses_count();
                 $categories[] = [
                     'id' => $category->id,
                     'name' => format_text($category->get_formatted_name(), FORMAT_HTML),
                     'description' => format_text($category->description, FORMAT_HTML),
-                    'coursecount' => $coursecount,
-                    'coursecounttext' => get_string('categorycount', 'theme_compecer', $coursecount),
                     'url' => new moodle_url('/course/index.php', ['categoryid' => $category->id])
                 ];
             }
         }
-        
+
         if (!empty($categories)) {
             $templatecontext['hassearchcategories'] = true;
             $templatecontext['categories'] = $categories;
