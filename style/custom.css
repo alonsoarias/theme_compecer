@@ -1005,3 +1005,180 @@ html {
     clip: rect(0,0,0,0);
     border: 0;
 }
+
+/* Search and Categories Section Styles */
+#search-categories {
+    transition: background-color 0.3s ease;
+}
+
+.search-box {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-form .input-group {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+.search-form .input-group:hover,
+.search-form .input-group:focus-within {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.search-form input {
+    border: 1px solid #e9ecef;
+    border-right: none;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+.search-form input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.search-form .btn {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border: none;
+}
+
+.search-form .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Categories Grid */
+.categories-section {
+    margin-top: 2rem;
+}
+
+.category-box {
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-box h4 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+}
+
+.category-box h4 a {
+    color: #455a64;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.category-box h4 a:hover {
+    color: var(--primary);
+}
+
+.category-box .description {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.course-count {
+    font-size: 0.9rem;
+    color: var(--primary);
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-form input {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .category-box {
+        margin-bottom: 1.5rem;
+    }
+
+    .category-box h4 {
+        font-size: 1.1rem;
+    }
+
+    .search-box {
+        padding: 0 1rem;
+    }
+}
+
+/* Animation */
+.category-box {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Utility Classes for Categories Section */
+.section-heading {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.search-section-description {
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+/* Accessibility Enhancements */
+.search-form input:focus,
+.category-box:focus-within {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.search-form .btn:focus {
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .category-box {
+        background-color: #2c3e50;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .category-box h4 a {
+        color: #fff;
+    }
+
+    .category-box .description {
+        color: #ddd;
+    }
+
+    .course-count {
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+}
