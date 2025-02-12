@@ -1,6 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-// 
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -109,45 +109,37 @@ $templatecontext = [
 if (!empty($PAGE->theme->settings->enable_slider) && !empty($PAGE->theme->settings->slidercount)) {
     $templatecontext['slidercount'] = true;
     $slides = [];
-
-    // [CAMBIO] Variable para saber si hay al menos una imagen mobile.
+    $validSlideCount = 0;
     $hasAnyMobileImage = false;
 
     for ($i = 1; $i <= $PAGE->theme->settings->slidercount; $i++) {
-        $slidetitle = $PAGE->theme->settings->{"slidertitle{$i}"} ?? '';
-        $slidercaption = $PAGE->theme->settings->{"slidercaption{$i}"} ?? '';
         $sliderimage = $PAGE->theme->setting_file_url("sliderimage{$i}", "sliderimage{$i}");
         $sliderimagemobile = $PAGE->theme->setting_file_url("sliderimage{$i}_mobile", "sliderimage{$i}_mobile");
 
-        // Solo agregamos el slide si hay imagen de escritorio.
         if ($sliderimage) {
-            // [CAMBIO] Si hay imagen mobile, marcamos la bandera.
             if ($sliderimagemobile) {
                 $hasAnyMobileImage = true;
             }
-
-            // [CAMBIO] Evitamos fallback. 
-            // Es decir, si no hay sliderimagemobile, mobile_image quedará vacío (null).
-            // Con ello, en vistas móviles NO se mostrará la desktop.
             
             $slides[] = [
-                'key' => $i - 1,
-                'active' => ($i === 1),
+                'key' => $validSlideCount,
+                'active' => ($validSlideCount === 0),
                 'image' => $sliderimage,
-                'mobile_image' => $sliderimagemobile, // Null si no existe.
-                'slidertitle' => $slidetitle,
-                'title' => $slidetitle,
-                'caption' => $slidercaption,
-                'hascaption' => !empty($slidetitle) || !empty($slidercaption)
+                'mobile_image' => $sliderimagemobile,
+                'has_mobile' => !empty($sliderimagemobile)
             ];
+            
+            $validSlideCount++;
         }
     }
 
-    $templatecontext['slides'] = $slides;
-    $templatecontext['slidersingleslide'] = (count($slides) === 1);
-
-    // [CAMBIO] Añadimos esta variable para que Mustache sepa si ocultar el carrusel en móvil.
-    $templatecontext['hasanymobileimage'] = $hasAnyMobileImage;
+    if (!empty($slides)) {
+        $templatecontext['slides'] = $slides;
+        $templatecontext['slidersingleslide'] = (count($slides) === 1);
+        $templatecontext['hasanymobileimage'] = $hasAnyMobileImage;
+    } else {
+        $templatecontext['slidercount'] = false;
+    }
 }
 
 // About section
@@ -164,13 +156,21 @@ if (!empty($PAGE->theme->settings->enablecareerboxes)) {
     $templatecontext['careerboxes'] = true;
     $templatecontext['careerboxesbgcolor'] = $PAGE->theme->settings->careerboxesbgcolor ?? '#365ba3';
 
+    $boxcount = !empty($PAGE->theme->settings->careerboxcount) ? (int)$PAGE->theme->settings->careerboxcount : 3;
+    $templatecontext['boxcount'] = $boxcount;
+
+    $columnClass = 'col-md-4';
+    $templatecontext['boxcolumnclass'] = $columnClass;
+
     $boxes = [];
-    for ($i = 1; $i <= 3; $i++) {
+    for ($i = 1; $i <= $boxcount; $i++) {
         if (!empty($PAGE->theme->settings->{"careerbox{$i}title"})) {
             $boxes[] = [
                 'icon' => $PAGE->theme->settings->{"careerbox{$i}icon"} ?? 'graduation-cap',
                 'title' => format_text($PAGE->theme->settings->{"careerbox{$i}title"} ?? '', FORMAT_HTML),
-                'content' => format_text($PAGE->theme->settings->{"careerbox{$i}content"} ?? '', FORMAT_HTML)
+                'content' => format_text($PAGE->theme->settings->{"careerbox{$i}content"} ?? '', FORMAT_HTML),
+                'columnclass' => $columnClass,
+                'row_break' => ($i === 4)
             ];
         }
     }
@@ -199,8 +199,10 @@ if (!empty($PAGE->theme->settings->enable_search_categories) && !empty($PAGE->th
         if (!empty($categories)) {
             $templatecontext['hassearchcategories'] = true;
             $templatecontext['categories'] = $categories;
-            $templatecontext['searchsectiontitle'] = format_text($PAGE->theme->settings->searchsectiontitle ?? get_string('searchsectiontitledefault', 'theme_compecer'), FORMAT_HTML);
-            $templatecontext['searchsectiondesc'] = format_text($PAGE->theme->settings->searchsectiondesc ?? get_string('searchsectiondescdefault', 'theme_compecer'), FORMAT_HTML);
+            $templatecontext['searchsectiontitle'] = format_text($PAGE->theme->settings->searchsectiontitle ?? 
+                get_string('searchsectiontitledefault', 'theme_compecer'), FORMAT_HTML);
+            $templatecontext['searchsectiondesc'] = format_text($PAGE->theme->settings->searchsectiondesc ?? 
+                get_string('searchsectiondescdefault', 'theme_compecer'), FORMAT_HTML);
             $templatecontext['categoriesbgcolor'] = $PAGE->theme->settings->categoriesbgcolor ?? '#f8f9fa';
         }
     }
@@ -209,5 +211,4 @@ if (!empty($PAGE->theme->settings->enable_search_categories) && !empty($PAGE->th
 // Merge with theme settings
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
 
-// Render the template
-echo $OUTPUT->render_from_template('theme_compecer/theme_moove/frontpage', $templatecontext);
+echo $OUTPUT->render_from_template('theme_compecer/frontpage', $templatecontext);
