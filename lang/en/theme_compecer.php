@@ -54,6 +54,7 @@ $string['generalnoticemode_danger'] = 'Critical';
 $string['generalnotice'] = 'Notice text';
 $string['generalnoticedesc'] = 'Text to show inside the alert box';
 $string['generalnotice_create'] = 'Set a notice';
+$string['generalnoticedefault'] = '<strong>We are working</strong> to improve. The platform may experience strange behaviors at times.';
 
 // Section visibility toggles
 $string['enable_slider'] = 'Enable slider section';
@@ -62,6 +63,24 @@ $string['enable_about'] = 'Enable about section';
 $string['enable_aboutdesc'] = 'Enable or disable the about section on the frontpage';
 $string['enable_search_categories'] = 'Enable search and categories section';
 $string['enable_search_categoriesdesc'] = 'Enable or disable the search and categories section on the frontpage';
+
+// Dashboard Cards Settings
+$string['mydashboardsettings'] = 'Dashboard Cards Settings';
+$string['enable_dashboard_cards'] = 'Enable Dashboard Cards';
+$string['enable_dashboard_cardsdesc'] = 'Enable or disable the dashboard cards section';
+$string['dashboard_card_heading'] = 'Dashboard Card {$a}';
+$string['dashboard_card_visibility'] = 'Show Card {$a}';
+$string['dashboard_card_visibilitydesc'] = 'Enable or disable dashboard card {$a}';
+$string['dashboard_card_title'] = 'Card {$a} Title';
+$string['dashboard_card_titledesc'] = 'Enter the title for dashboard card {$a}';
+$string['dashboard_card_subtitle'] = 'Card {$a} Subtitle';
+$string['dashboard_card_subtitledesc'] = 'Enter the subtitle for dashboard card {$a}';
+$string['dashboard_card_url'] = 'Card {$a} URL';
+$string['dashboard_card_urldesc'] = 'Enter the URL for dashboard card {$a}';
+$string['dashboard_card_color'] = 'Card {$a} Color';
+$string['dashboard_card_colordesc'] = 'Choose the color for dashboard card {$a}';
+$string['dashboard_card_icon'] = 'Card {$a} Icon';
+$string['dashboard_card_icondesc'] = 'Choose the icon for dashboard card {$a}';
 
 // Chat settings
 $string['enable_chat'] = 'Enable chat widget';
@@ -130,6 +149,11 @@ $string['careerboxtitledefault'] = 'Career Path {$a}';
 $string['careerboxcontentdefault'] = 'Describe career path {$a} here';
 
 // Icon Strings
+$string['icon_message'] = 'Message';
+$string['icon_user'] = 'User';
+$string['icon_settings'] = 'Settings';
+$string['icon_chart_line'] = 'Line Chart';
+$string['icon_chart_bar'] = 'Bar Chart';
 $string['icon_graduation'] = 'Graduation Cap';
 $string['icon_book'] = 'Book';
 $string['icon_laptop'] = 'Laptop';
@@ -164,6 +188,22 @@ $string['searchsectiondescdesc'] = 'Description text for the search section';
 $string['searchsectiondescdefault'] = 'Search through our wide range of courses';
 $string['categoriesbgcolor'] = 'Categories Background Color';
 $string['categoriesbgcolordesc'] = 'Background color for the categories section';
+
+// Visibility strings
+$string['show'] = 'Show';
+$string['hide'] = 'Hide';
+$string['config_visibility'] = 'Visibility';
+$string['config_visibility_desc'] = 'Show or hide this element';
+$string['config_title'] = 'Title';
+$string['config_title_desc'] = 'Enter the title for this element';
+$string['config_subtitle'] = 'Subtitle';
+$string['config_subtitle_desc'] = 'Enter the subtitle for this element';
+$string['config_link'] = 'Link URL';
+$string['config_link_desc'] = 'Enter the URL this element should link to';
+$string['config_color'] = 'Color';
+$string['config_color_desc'] = 'Choose the color for this element';
+$string['config_icon_class'] = 'Icon';
+$string['config_icon_class_desc'] = 'Choose the icon for this element';
 
 // Cache strings
 $string['cachedef_fontawesomemooveiconmapping'] = 'Theme font icon mapping';
