@@ -148,30 +148,35 @@ public function full_header() {
     // Preparar el contexto para la plantilla
     $header = new stdClass();
     
-    // Manejar las notificaciones
-    $header->hasnotice = false;
-    $header->notice = '';
-    $header->noticeclass = '';
-    $header->noticeicon = '';
+    // Inicializar contenido del aviso general
+    $header->generalnotice = '';
     
+    // Aviso general (notice)
     if (!empty(trim($theme->settings->generalnotice))) {
-        $header->hasnotice = true;
-        $header->notice = $theme->settings->generalnotice;
-        
-        if ($theme->settings->generalnoticemode == 'info') {
-            $header->noticeclass = 'alert-info';
-            $header->noticeicon = 'fa-info-circle';
-        } else if ($theme->settings->generalnoticemode == 'danger') {
-            $header->noticeclass = 'alert-danger';
-            $header->noticeicon = 'fa-warning';
+        $mode = $theme->settings->generalnoticemode;
+        // 'info' => alert-info, 'danger' => alert-danger, 'off' => sin aviso
+        if ($mode === 'info') {
+            $header->generalnotice = '<div class="alert alert-info mt-4">' .
+                '<strong><i class="fa fa-info-circle"></i></strong> ' . 
+                $theme->settings->generalnotice . 
+                '</div>';
+        } else if ($mode === 'danger') {
+            $header->generalnotice = '<div class="alert alert-danger mt-4">' .
+                '<strong><i class="fa fa-warning"></i></strong> ' . 
+                $theme->settings->generalnotice . 
+                '</div>';
         }
-    } else if (is_siteadmin() && $theme->settings->generalnoticemode == 'off') {
-        $header->hasnotice = true;
-        $header->notice = get_string('generalnotice_create', 'theme_compecer');
-        $header->noticeclass = 'alert-light';
-        $header->noticeicon = 'fa-edit';
-        $header->isadminnotice = true;
-        $header->settingsurl = $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer';
+    }
+
+    // Recordatorio para admin, si el aviso está en modo 'off'
+    if (is_siteadmin() && 
+        (!empty($theme->settings->generalnoticemode) && 
+         $theme->settings->generalnoticemode === 'off')) {
+        $header->generalnotice = '<div class="alert mt-4">' .
+            '<a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer">' .
+            '<strong><i class="fa fa-edit"></i></strong> ' . 
+            get_string('generalnotice_create', 'theme_compecer') . 
+            '</a></div>';
     }
     
     // Obtener imagen del curso
