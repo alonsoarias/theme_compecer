@@ -1293,3 +1293,225 @@ html {
         color: #000; /* Black icons for print */
     }
 }
+/* Dashboard Sidebar Main Structure */
+.dashboard_sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    margin: 0;
+    padding: 150px 0 0 0;
+    width: 280px;
+    z-index: 9;
+}
+
+.dashboard_sidebar:before {
+    background-color: rgb(255, 255, 255);
+    bottom: 0;
+    content: "";
+    left: 0;
+    right: 0;
+    top: -60px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .09);
+    position: absolute;
+}
+
+/* Dashboard Sidebar Inner Container */
+.dashboard_sidebars {
+    position: relative;
+    z-index: 1;
+}
+
+/* User Board Section */
+.user_board {
+    padding: 15px 0;
+}
+
+.user_profile {
+    padding: 0 30px 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.user_profile .media {
+    display: flex;
+    align-items: center;
+}
+
+.user_profile .media-body h4 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color: #333;
+}
+
+/* Navigation List */
+.dashbord_nav_list {
+    position: relative;
+    margin-top: 20px;
+}
+
+.dashbord_nav_list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dashbord_nav_list ul li {
+    position: relative;
+}
+
+.dashbord_nav_list ul li a {
+    color: #686f7a;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 12px 30px;
+    position: relative;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border-left: 4px solid transparent;
+}
+
+.dashbord_nav_list ul li a:hover,
+.dashbord_nav_list ul li a.active {
+    background-color: rgba(17, 119, 209, 0.1);
+    color: #1177d1;
+    border-left: 4px solid #1177d1;
+}
+
+.dashbord_nav_list ul li a i {
+    font-size: 16px;
+    width: 20px;
+    margin-right: 15px;
+    text-align: center;
+}
+
+/* Font Awesome Icon Specific Adjustments */
+.dashbord_nav_list .fa {
+    display: inline-block;
+    line-height: 1;
+    min-width: 20px;
+}
+
+/* Main Content Adjustments */
+#dashboard-main {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    min-height: calc(100vh - var(--navbar-height));
+    padding: 20px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* Block Region Styles */
+.block-region {
+    margin-top: 20px;
+}
+
+.block-region [data-block] {
+    margin-bottom: 20px;
+}
+
+/* Padding Utilities */
+.pl30 {
+    padding-left: 30px;
+}
+
+.pr30 {
+    padding-right: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 1199px) {
+    .dn-1199 {
+        display: none;
+    }
+    
+    #dashboard-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+/* RTL Support */
+.dir-rtl .dashboard_sidebar {
+    left: auto;
+    right: 0;
+}
+
+.dir-rtl .dashbord_nav_list ul li a {
+    padding: 12px 30px;
+    border-left: none;
+    border-right: 4px solid transparent;
+}
+
+.dir-rtl .dashbord_nav_list ul li a i {
+    margin-right: 0;
+    margin-left: 15px;
+}
+
+.dir-rtl .dashbord_nav_list ul li a:hover,
+.dir-rtl .dashbord_nav_list ul li a.active {
+    border-left: none;
+    border-right: 4px solid #1177d1;
+}
+
+.dir-rtl #dashboard-main {
+    margin-left: 0;
+    margin-right: 280px;
+}
+
+@media (max-width: 1199px) {
+    .dir-rtl #dashboard-main {
+        margin-right: 0;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .dashboard_sidebar {
+        display: none;
+    }
+    
+    #dashboard-main {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .dir-rtl #dashboard-main {
+        margin-right: 0;
+    }
+}
+
+/* Drawer Integration Fixes */
+.drawer.drawer-left {
+    z-index: 10;
+}
+
+.drawer.drawer-right {
+    z-index: 10;
+}
+
+/* Accessibility Improvements */
+.dashbord_nav_list ul li a:focus {
+    outline: 2px solid #1177d1;
+    outline-offset: -2px;
+}
+
+/* Custom Scrollbar */
+.dashboard_sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.dashboard_sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dashboard_sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dashboard_sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
