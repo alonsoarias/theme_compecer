@@ -31,34 +31,37 @@ require_once($CFG->dirroot . '/course/lib.php');
 $addblockbutton = $OUTPUT->addblockbutton();
 
 // Drawer open states.
+$courseindexopen = false;
+$blockdraweropen = false;
+
 if (isloggedin()) {
     $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
     $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
-} else {
-    $courseindexopen = false;
-    $blockdraweropen = false;
 }
 
 if (defined('BEHAT_SITE_RUNNING') && get_user_preferences('behat_keep_drawer_closed') != 1) {
     $blockdraweropen = true;
 }
 
+// Handle drawer states.
 $extraclasses = ['uses-drawers'];
 if ($courseindexopen) {
     $extraclasses[] = 'drawer-open-index';
 }
 
+// Check for blocks.
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
 if (!$hasblocks) {
     $blockdraweropen = false;
 }
 
+// Load theme settings.
 $themesettings = new \theme_moove\util\settings();
 
-if (!$themesettings->enablecourseindex) {
-    $courseindex = '';
-} else {
+// Check course index.
+$courseindex = '';
+if ($themesettings->enablecourseindex) {
     $courseindex = core_course_drawer();
 }
 
@@ -66,11 +69,13 @@ if (!$courseindex) {
     $courseindexopen = false;
 }
 
+// Check for forced blocks.
 $forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
 
-// Secondary navigation.
+// Handle secondary navigation.
 $secondarynavigation = false;
 $overflow = '';
+
 if ($PAGE->has_secondary_navigation()) {
     $secondary = $PAGE->secondarynav;
     if ($secondary->get_children_key_list()) {
@@ -79,30 +84,31 @@ if ($PAGE->has_secondary_navigation()) {
         $secondarynavigation = $moremenu->export_for_template($OUTPUT);
         $extraclasses[] = 'has-secondarynavigation';
     }
+    
     $overflowdata = $PAGE->secondarynav->get_overflow_menu_data();
     if (!is_null($overflowdata)) {
         $overflow = $overflowdata->export_for_template($OUTPUT);
     }
 }
 
-// Primary navigation.
+// Setup primary navigation.
 $primary = new core\navigation\output\primary($PAGE);
 $renderer = $PAGE->get_renderer('core');
 $primarymenu = $primary->export_for_template($renderer);
 
-// Build the main header content.
+// Setup region main settings.
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
+
+// Get header content.
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
-// Get session key for logout and role switching
+// Get session key and check roles.
 $sesskey = sesskey();
-
-// Check if user has roles that can be switched
 $hasroles = has_capability('moodle/role:switchroles', context_course::instance($COURSE->id));
 
-// Define dashboard menu items (same as dashboard.php)
+// Setup dashboard menu items.
 $dashboardmenuitems = [
     [
         'url' => new moodle_url('/my/'),
@@ -161,7 +167,7 @@ $dashboardmenuitems = [
     ]
 ];
 
-// Add role switcher if user has capability
+// Add role switcher if user has capability.
 if ($hasroles) {
     $dashboardmenuitems[] = [
         'url' => new moodle_url('/course/switchrole.php', [
@@ -176,26 +182,56 @@ if ($hasroles) {
     ];
 }
 
-// Dashboard Cards configuration
+// Dashboard Cards configuration with responsive settings
 $dashboardcards = array();
 $enabledashboardcards = get_config('theme_compecer', 'enable_dashboard_cards');
 
 if ($enabledashboardcards) {
+    // Definimos las clases responsivas base
+    $responsive_classes = array(
+        'base' => 'col-12',          // Móviles pequeños (<576px)
+        'sm' => 'col-sm-6',          // Móviles (≥576px)
+        'md' => 'col-md-6',          // Tablets (≥768px)
+        'lg' => 'col-lg-4',          // Desktops (≥992px)
+        'xl' => 'col-xl-3'           // Desktops grandes (≥1200px)
+    );
+
+    // Colores predeterminados para las cards
+    $default_colors = [
+        '#4361ee',  // Azul
+        '#f72585',  // Rosa
+        '#2ec4b6',  // Verde azulado
+        '#f9c74f'   // Amarillo
+    ];
+
     for ($i = 1; $i <= 4; $i++) {
-        // Add card if it is marked as visible
         if (get_config('theme_compecer', "dashboard_card_{$i}_visibility")) {
+            $cardColor = get_config('theme_compecer', "dashboard_card_{$i}_color");
+            // Si no hay color definido, usar uno predeterminado
+            if (empty($cardColor)) {
+                $cardColor = $default_colors[($i - 1) % count($default_colors)];
+            }
+
             $dashboardcards[] = array(
-                'title' => get_config('theme_compecer', "dashboard_card_{$i}_title"),
-                'subtitle' => get_config('theme_compecer', "dashboard_card_{$i}_subtitle"),
-                'url' => get_config('theme_compecer', "dashboard_card_{$i}_url"),
-                'color' => get_config('theme_compecer', "dashboard_card_{$i}_color"),
-                'iconclass' => get_config('theme_compecer', "dashboard_card_{$i}_icon")
+                'title' => format_string(get_config('theme_compecer', "dashboard_card_{$i}_title")),
+                'subtitle' => format_string(get_config('theme_compecer', "dashboard_card_{$i}_subtitle")),
+                'url' => new moodle_url(get_config('theme_compecer', "dashboard_card_{$i}_url")),
+                'color' => clean_param($cardColor, PARAM_TEXT),
+                'iconclass' => clean_param(get_config('theme_compecer', "dashboard_card_{$i}_icon"), PARAM_ALPHANUMEXT),
+                'responsive_classes' => implode(' ', $responsive_classes),
+                'order' => $i,
+                'card_id' => "dashboard-card-{$i}"
             );
         }
     }
+    
+    // Ordenar cards según configuración
+    usort($dashboardcards, function($a, $b) {
+        return $a['order'] - $b['order'];
+    });
 }
 
-// Template context.
+// Build template context.
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
@@ -222,13 +258,14 @@ $templatecontext = [
     'sesskey' => $sesskey,
     'hasroles' => $hasroles,
     'courseid' => $COURSE->id,
-    // Dashboard cards data
+    // Dashboard cards data with responsive settings
     'dashboardcards' => $dashboardcards,
     'hasdashboardcards' => !empty($dashboardcards),
-    'enabledashboardcards' => $enabledashboardcards
+    'enabledashboardcards' => $enabledashboardcards,
+    'responsive_classes' => $responsive_classes
 ];
 
-// Get any custom settings from the theme.
+// Merge with theme settings.
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
 
 // Render the template.
