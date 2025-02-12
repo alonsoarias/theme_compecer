@@ -88,13 +88,13 @@ $dashboardcards = array();
 // Only process cards if the feature is enabled
 if (get_config('theme_compecer', 'enable_dashboard_cards')) {
     for ($i = 1; $i <= 4; $i++) {
-        // Only add card if it's visible
-        if (!get_config('theme_compecer', "dashboard_card_{$i}_visibility")) {
+        // Add card if it is marked as visible.
+        if (get_config('theme_compecer', "dashboard_card_{$i}_visibility")) {
             $dashboardcards[] = array(
-                'title' => get_config('theme_compecer', "dashboard_card_{$i}_title"),
-                'subtitle' => get_config('theme_compecer', "dashboard_card_{$i}_subtitle"),
-                'url' => get_config('theme_compecer', "dashboard_card_{$i}_url"),
-                'color' => get_config('theme_compecer', "dashboard_card_{$i}_color"),
+                'title'     => get_config('theme_compecer', "dashboard_card_{$i}_title"),
+                'subtitle'  => get_config('theme_compecer', "dashboard_card_{$i}_subtitle"),
+                'url'       => get_config('theme_compecer', "dashboard_card_{$i}_url"),
+                'color'     => get_config('theme_compecer', "dashboard_card_{$i}_color"),
                 'iconclass' => get_config('theme_compecer', "dashboard_card_{$i}_icon")
             );
         }
