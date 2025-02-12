@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template theme_compecer/full_header
+    @template theme_compecer/core/full_header
 
     This template renders the header.
 
@@ -33,7 +33,8 @@
             "url": "http://example.com",
             "icon": "cog",
             "title": "Action link"
-        }]
+        }],
+        "generalnotice": "notice_html"
     }
 }}
 <header id="page-header" class="moove-container-fluid">
@@ -105,6 +106,7 @@
     </div>
 
     {{> core/welcome }}
-</header>
 
-{{{generalnotice}}}
+    {{! Aviso general }}
+    {{{generalnotice}}}
+</header>
