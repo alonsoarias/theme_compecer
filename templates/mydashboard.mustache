@@ -1,13 +1,16 @@
 {{!
     This file is part of Moodle - http://moodle.org/
+
     Moodle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     Moodle is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
@@ -25,12 +28,10 @@
     <div id="page-wrapper" class="d-print-block">
         {{{ output.standard_top_of_body_html }}}
         {{> theme_moove/navbar }}
-        {{! Include the dashboard sidebar partial }}
         {{> theme_compecer/partials/dashboard_sidebar }}
         
         <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers {{#courseindexopen}}show-drawer-left{{/courseindexopen}} {{#blockdraweropen}}show-drawer-right{{/blockdraweropen}} drag-container">
             
-            <!-- Course Index Drawer (si existe contenido para él) -->
             {{#courseindex}}
                 {{< theme_boost/drawer }}
                     {{$id}}theme_boost-drawers-courseindex{{/id}}
@@ -48,7 +49,6 @@
                 {{/ theme_boost/drawer }}
             {{/courseindex}}
             
-            <!-- Blocks Drawer (si hay bloques) -->
             {{#hasblocks}}
                 {{< theme_boost/drawer }}
                     {{$id}}theme_boost-drawers-blocks{{/id}}
@@ -68,33 +68,37 @@
                 {{/ theme_boost/drawer }}
             {{/hasblocks}}
             
-            <!-- Main Content Area -->
             <div id="dashboard-main" class="main-content">
                 {{{ output.full_header }}}
                 
                 {{#enabledashboardcards}}
                 {{#hasdashboardcards}}
-                <!-- Dashboard Cards Section -->
-                <div class="container-fluid dashboard-cards-section my-4">
-                    <div class="row">
-                        {{#dashboardcards}}
-                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
-                            <a href="{{{ url }}}" class="ff_one">
-                                <div class="detais">
-                                    <p>{{ subtitle }}</p>
-                                    {{ title }}
+                <div class="dashboard-cards-wrapper py-3">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            {{#dashboardcards}}
+                            <div class="{{responsive_classes}}" data-card-id="{{card_id}}">
+                                <div class="dashboard-card h-100">
+                                    <a href="{{{url}}}" class="card-wrapper ff_one">
+                                        <div class="card-content">
+                                            <div class="detais">
+                                                <h3 class="card-title mb-2">{{title}}</h3>
+                                                <p class="card-subtitle mb-0">{{subtitle}}</p>
+                                            </div>
+                                            <div class="ff_icon" style="background-color: {{color}}">
+                                                <span class="fas fa-{{{iconclass}}}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                                <div class="ff_icon" style="background-color: {{ color }}">
-                                    <span class="fas fa-{{{ iconclass }}}"></span>
-                                </div>
-                            </a>
+                            </div>
+                            {{/dashboardcards}}
                         </div>
-                        {{/dashboardcards}}
                     </div>
                 </div>
                 {{/hasdashboardcards}}
                 {{/enabledashboardcards}}
-    
+                
                 <div id="topofscroll" class="main-inner">
                     <div class="drawer-toggles d-flex">
                         {{#courseindex}}
@@ -162,8 +166,7 @@
                     </div>
                 </div>
                 
-                <!-- Footer con espaciado adecuado para que no se superponga -->
-                <div class="dashboard-footer">
+                <div class="dashboard-footer mt-4">
                     {{> theme_moove/footer }}
                 </div>
             </div>
