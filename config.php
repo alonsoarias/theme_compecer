@@ -135,13 +135,13 @@ $THEME->layouts = [
     ),
     // Server administration scripts.
     'admin' => array(
-        'file' => 'drawers.php',
+        'file' => 'dashboard.php',
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),
     // My courses page.
     'mycourses' => array(
-        'file' => 'drawers.php',
+        'file' => 'dashboard.php',
         'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
         'options' => array('nonavbar' => true),
