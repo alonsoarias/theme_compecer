@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A dashboard layout for the moove theme.
+ * A dashboard layout for the compecer theme.
  *
- * @package    theme_moove
- * @copyright  2024 Your Name
+ * @package    theme_compecer
+ * @copyright  2024 Pedro Arias <soporte@ingeweb.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,6 +30,7 @@ require_once($CFG->dirroot . '/course/lib.php');
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
+// Drawer open states.
 if (isloggedin()) {
     $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
     $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
@@ -67,30 +68,31 @@ if (!$courseindex) {
 
 $forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
 
+// Secondary navigation.
 $secondarynavigation = false;
 $overflow = '';
 if ($PAGE->has_secondary_navigation()) {
     $secondary = $PAGE->secondarynav;
-
     if ($secondary->get_children_key_list()) {
         $tablistnav = $PAGE->has_tablist_secondary_navigation();
         $moremenu = new \core\navigation\output\more_menu($PAGE->secondarynav, 'nav-tabs', true, $tablistnav);
         $secondarynavigation = $moremenu->export_for_template($OUTPUT);
         $extraclasses[] = 'has-secondarynavigation';
     }
-
     $overflowdata = $PAGE->secondarynav->get_overflow_menu_data();
     if (!is_null($overflowdata)) {
         $overflow = $overflowdata->export_for_template($OUTPUT);
     }
 }
 
+// Primary navigation.
 $primary = new core\navigation\output\primary($PAGE);
 $renderer = $PAGE->get_renderer('core');
 $primarymenu = $primary->export_for_template($renderer);
+
+// Build the main header content.
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
-
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
@@ -100,68 +102,68 @@ $sesskey = sesskey();
 // Check if user has roles that can be switched
 $hasroles = has_capability('moodle/role:switchroles', context_course::instance($COURSE->id));
 
-// Define complete navigation menu items
-$menuitems = [
+// Define dashboard menu items
+$dashboardmenuitems = [
     [
         'url' => new moodle_url('/my/'),
         'title' => get_string('myhome'),
-        'icon' => 'fa fa-tachometer',  // Dashboard icon
+        'icon' => 'fa-tachometer',
         'key' => 'home',
         'active' => $PAGE->url->compare(new moodle_url('/my/'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/user/profile.php'),
         'title' => get_string('profile'),
-        'icon' => 'fa fa-user',  // User icon
+        'icon' => 'fa-user',
         'key' => 'profile',
         'active' => $PAGE->url->compare(new moodle_url('/user/profile.php'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/grade/report/overview/index.php'),
         'title' => get_string('grades'),
-        'icon' => 'fa fa-graduation-cap',  // Graduation cap icon
+        'icon' => 'fa-graduation-cap',
         'key' => 'grades',
         'active' => $PAGE->url->compare(new moodle_url('/grade/report/overview/index.php'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/message/index.php'),
         'title' => get_string('messages', 'message'),
-        'icon' => 'fa fa-comments',  // Comments icon
+        'icon' => 'fa-comments',
         'key' => 'messages',
         'active' => $PAGE->url->compare(new moodle_url('/message/index.php'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/calendar/view.php'),
         'title' => get_string('calendar', 'calendar'),
-        'icon' => 'fa fa-calendar',  // Calendar icon
+        'icon' => 'fa-calendar',
         'key' => 'calendar',
         'active' => $PAGE->url->compare(new moodle_url('/calendar/view.php'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/user/files.php'),
         'title' => get_string('privatefiles'),
-        'icon' => 'fa fa-file',  // File icon
+        'icon' => 'fa-file',
         'key' => 'files',
         'active' => $PAGE->url->compare(new moodle_url('/user/files.php'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/user/preferences.php'),
         'title' => get_string('preferences'),
-        'icon' => 'fa fa-cog',  // Cog/settings icon
+        'icon' => 'fa-cog',
         'key' => 'preferences',
         'active' => $PAGE->url->compare(new moodle_url('/user/preferences.php'), URL_MATCH_BASE)
     ],
     [
         'url' => new moodle_url('/login/logout.php', ['sesskey' => $sesskey]),
         'title' => get_string('logout'),
-        'icon' => 'fa fa-sign-out',  // Sign out icon
+        'icon' => 'fa-sign-out',
         'key' => 'logout'
     ]
 ];
 
 // Add role switcher if user has capability
 if ($hasroles) {
-    $menuitems[] = [
+    $dashboardmenuitems[] = [
         'url' => new moodle_url('/course/switchrole.php', [
             'id' => $COURSE->id,
             'sesskey' => $sesskey,
@@ -169,18 +171,18 @@ if ($hasroles) {
             'returnurl' => $PAGE->url->out_as_local_url(false)
         ]),
         'title' => get_string('switchroleto'),
-        'icon' => 'fa fa-user-secret',  // User secret/role icon
+        'icon' => 'fa-user-secret',
         'key' => 'switchrole'
     ];
 }
 
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+// Template context.
 $templatecontext = [
-    'sitename' => format_string($SITE->shortname, true, ['context' => \core\context\course::instance(SITEID), "escape" => false]),
+    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
-    'bodyattributes' => $bodyattributes,
+    'bodyattributes' => $OUTPUT->body_attributes($extraclasses),
     'courseindexopen' => $courseindexopen,
     'blockdraweropen' => $blockdraweropen,
     'courseindex' => $courseindex,
@@ -196,13 +198,15 @@ $templatecontext = [
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
     'enablecourseindex' => $themesettings->enablecourseindex,
-    // Dashboard specific variables
-    'dashboardmenuitems' => $menuitems,
+    // Dashboard specific data
+    'dashboardmenuitems' => $dashboardmenuitems,
     'sesskey' => $sesskey,
     'hasroles' => $hasroles,
     'courseid' => $COURSE->id
 ];
 
+// Get any custom settings from the theme.
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
 
+// Render the template.
 echo $OUTPUT->render_from_template('theme_compecer/dashboard', $templatecontext);
