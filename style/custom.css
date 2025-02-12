@@ -235,7 +235,7 @@
       font-size: 20px;
       border-radius: 20px !important;
     }
-    #loginbtn .btn-primary:hover {
+    #loginbtn .btn-primary:hover { 
       color: $white;
       width: 240px;
       height: 43px;
@@ -490,10 +490,6 @@
   
   .dashboard-card .dashboard-card-img .course-category {
     background-color: $primary-red;
-  }
-  
-  .dashboard-card {
-    border: 0.5px solid darken($primary-blue, 10%);
   }
   
   .pagelayout-mydashboard .card {
@@ -874,7 +870,7 @@
   }
   
   #about-section .section-heading {
-    color: #90a1c2;
+    color: $primary-blue;
     font-size: 2.5rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
@@ -971,17 +967,11 @@
   
   /* Botón terciario de ejemplo */
   .btn-tertiary {
-    background-color: #8b5ad1;
+    background-color: $primary-blue;
     color: $white !important;
-    border: 1px solid #8b5ad1;
     font-weight: 600;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
-  .btn-tertiary:hover {
-    background-color: #7a4fba;
-    border-color: #7a4fba;
-  }
-  
+  }  
   /* -------------------------------------------------------------------------
      Ajustes responsivos para frontpage
      ------------------------------------------------------------------------- */
@@ -1077,221 +1067,147 @@
     /* Opcional: ajustes para modo oscuro */
   }
   
-  /* Dashboard Cards - Modern Style */
-  .dashboard-cards-section {
+  /* Dashboard Cards Base Styles */
+  .dashboard-cards-wrapper {
+    background-color: #f5f7fa;
     padding: 1.5rem 0;
-    margin-bottom: 2rem;
   }
   
-  .ff_one {
+  .dashboard-card {
     position: relative;
-    background-color: $white;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    min-height: 180px;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .ff_one::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
     height: 100%;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    opacity: 0;
-    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    min-height: 160px; /* Altura mínima base */
+  }
+  .dashboard-card{
+    border: 0px solid #e9ecef;
   }
   
-  .ff_one:hover {
-    transform: translateY(-5px);
+  /* Card Base Design */
+  .card-wrapper.ff_one {
+    position: relative;
+    display: flex;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s ease;
     text-decoration: none;
   }
   
-  .ff_one:hover::after {
-    opacity: 1;
+  .card-wrapper.ff_one:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
   }
   
-  .ff_one .detais {
+  /* Card Content Structure */
+  .card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+  }
+  
+  /* Card Text Elements */
+  .card-wrapper .detais {
     flex: 1;
-    padding-right: 2.5rem;
-    z-index: 1;
+    min-width: 0;
+    padding-right: 0.5rem;
   }
   
-  .ff_one .detais p {
-    font-size: 1rem;
-    color: rgba(10, 10, 10, 0.6);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0 0 0.5rem 0;
-    transition: color 0.3s ease;
-  }
-  
-  .ff_one:hover .detais p {
-    color: rgba(10, 10, 10, 0.8);
-  }
-  
-  .ff_one .detais span {
-    display: block;
-    font-size: 1.75rem;
-    color: #0a0a0a;
-    font-weight: 700;
+  .card-wrapper .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
     line-height: 1.3;
-    margin-top: 0.25rem;
-    transition: color 0.3s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   
-  .ff_one .ff_icon {
-    position: relative;
-    min-width: 120px;
-    height: 120px;
-    border-radius: 12px;
+  .card-wrapper .card-subtitle {
+    font-size: 0.9375rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    height: 2.8em;
+  }
+  
+  /* Card Icon */
+  .card-wrapper .ff_icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
-    transition: all 0.3s ease;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 10px;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
   }
   
-  .ff_one .ff_icon span {
-    font-size: 2.5rem;
-    color: $white;
-    transition: transform 0.3s ease;
+  .card-wrapper .ff_icon span {
+    font-size: 1.75rem;
+    color: #fff;
+    transition: transform 0.25s ease;
   }
   
-  .ff_one:hover .ff_icon span {
-    transform: scale(1.1);
+  .card-wrapper:hover .ff_icon span {
+    transform: scale(1.15);
   }
   
-  /* Custom styles for each card type */
-  .ff_one[data-card="messages"] .ff_icon {
-    background-color: #2441e7;
+  /* Card Colors with Gradient */
+  .ff_one[data-card-type="home"] .ff_icon {
+    background: linear-gradient(135deg, #4361ee, #3451db);
   }
   
-  .ff_one[data-card="profile"] .ff_icon {
-    background-color: #ff1053;
+  .ff_one[data-card-type="profile"] .ff_icon {
+    background: linear-gradient(135deg, #2ec4b6, #25ab9f);
   }
   
-  .ff_one[data-card="settings"] .ff_icon {
-    background-color: #00a78e;
+  .ff_one[data-card-type="grades"] .ff_icon {
+    background: linear-gradient(135deg, #f72585, #e31b76);
   }
   
-  .ff_one[data-card="grades"] .ff_icon {
-    background-color: #ecd06f;
+  .ff_one[data-card-type="calendar"] .ff_icon {
+    background: linear-gradient(135deg, #f9c74f, #f4b730);
+  }
+   
+  /* RTL Support */
+  [dir="rtl"] .card-content {
+    flex-direction: row-reverse;
   }
   
-  /* Responsive adjustments */
-  @media (max-width: 1400px) {
-    .ff_one {
-      padding: 1.75rem;
-      min-height: 160px;
-    }
-  
-    .ff_one .ff_icon {
-      min-width: 110px;
-      height: 110px;
-    }
-  
-    .ff_one .detais span {
-      font-size: 1.5rem;
-    }
+  [dir="rtl"] .card-wrapper .detais {
+    padding-right: 0;
+    padding-left: 0.5rem;
   }
   
-  @media (max-width: 1200px) {
-    .ff_one {
-      padding: 1.5rem;
-      min-height: 150px;
-    }
-  
-    .ff_one .ff_icon {
-      min-width: 100px;
-      height: 100px;
-    }
-  
-    .ff_one .ff_icon span {
-      font-size: 2.25rem;
-    }
-  
-    .ff_one .detais span {
-      font-size: 1.35rem;
-    }
-  }
-  
-  @media (max-width: 992px) {
-    .ff_one {
-      padding: 1.25rem;
-      min-height: 140px;
-    }
-  
-    .ff_one .detais {
-      padding-right: 1.5rem;
-    }
-  
-    .ff_one .ff_icon {
-      min-width: 90px;
-      height: 90px;
-    }
-  
-    .ff_one .ff_icon span {
-      font-size: 2rem;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .ff_one {
-      padding: 1rem;
-      min-height: 130px;
-    }
-  
-    .ff_one .detais {
-      padding-right: 1rem;
-    }
-  
-    .ff_one .detais p {
-      font-size: 0.875rem;
-    }
-  
-    .ff_one .detais span {
-      font-size: 1.25rem;
-    }
-  
-    .ff_one .ff_icon {
-      min-width: 80px;
-      height: 80px;
-    }
-  
-    .ff_one .ff_icon span {
-      font-size: 1.75rem;
-    }
-  }
-  
-  /* Print styles */
-  @media print {
-    .dashboard-cards-section {
-      break-inside: avoid;
-    }
-  
-    .ff_one {
-      border: 1px solid #ddd;
-      box-shadow: none;
-      break-inside: avoid;
-    }
-  
-    .ff_one::after {
-      display: none;
+  /* Touch Device Optimizations */
+  @media (hover: hover) and (pointer: fine) {
+    .card-wrapper.ff_one:hover {
+        transform: translateY(-4px);
     }
     
-    .ff_one .ff_icon span {
-      color: #000;
+    .card-wrapper:hover .ff_icon span {
+        transform: scale(1.15);
+    }
+  }
+  
+  @media (hover: none) {
+    .card-wrapper.ff_one:active {
+        transform: translateY(-2px);
+    }
+    
+    .card-wrapper .ff_icon span {
+        transform: none;
     }
   }
   
