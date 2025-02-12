@@ -1,6 +1,21 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * MyDashboard layout for theme_compecer.
+ * A my dashboard layout for the compecer theme.
  *
  * @package    theme_compecer
  * @copyright  2024 Pedro Arias <soporte@ingeweb.co>
@@ -40,11 +55,13 @@ if (!$hasblocks) {
 }
 
 $themesettings = new \theme_moove\util\settings();
+
 if (!$themesettings->enablecourseindex) {
     $courseindex = '';
 } else {
     $courseindex = core_course_drawer();
 }
+
 if (!$courseindex) {
     $courseindexopen = false;
 }
@@ -73,28 +90,105 @@ $primary = new core\navigation\output\primary($PAGE);
 $renderer = $PAGE->get_renderer('core');
 $primarymenu = $primary->export_for_template($renderer);
 
-// Header content.
+// Build the main header content.
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
-// Body attributes.
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+// Get session key for logout and role switching
+$sesskey = sesskey();
 
-// Dashboard Cards configuration.
+// Check if user has roles that can be switched
+$hasroles = has_capability('moodle/role:switchroles', context_course::instance($COURSE->id));
+
+// Define dashboard menu items (same as dashboard.php)
+$dashboardmenuitems = [
+    [
+        'url' => new moodle_url('/my/'),
+        'title' => get_string('myhome'),
+        'icon' => 'fa-tachometer',
+        'key' => 'home',
+        'active' => $PAGE->url->compare(new moodle_url('/my/'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/user/profile.php'),
+        'title' => get_string('profile'),
+        'icon' => 'fa-user',
+        'key' => 'profile',
+        'active' => $PAGE->url->compare(new moodle_url('/user/profile.php'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/grade/report/overview/index.php'),
+        'title' => get_string('grades'),
+        'icon' => 'fa-graduation-cap',
+        'key' => 'grades',
+        'active' => $PAGE->url->compare(new moodle_url('/grade/report/overview/index.php'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/message/index.php'),
+        'title' => get_string('messages', 'message'),
+        'icon' => 'fa-comments',
+        'key' => 'messages',
+        'active' => $PAGE->url->compare(new moodle_url('/message/index.php'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/calendar/view.php'),
+        'title' => get_string('calendar', 'calendar'),
+        'icon' => 'fa-calendar',
+        'key' => 'calendar',
+        'active' => $PAGE->url->compare(new moodle_url('/calendar/view.php'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/user/files.php'),
+        'title' => get_string('privatefiles'),
+        'icon' => 'fa-file',
+        'key' => 'files',
+        'active' => $PAGE->url->compare(new moodle_url('/user/files.php'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/user/preferences.php'),
+        'title' => get_string('preferences'),
+        'icon' => 'fa-cog',
+        'key' => 'preferences',
+        'active' => $PAGE->url->compare(new moodle_url('/user/preferences.php'), URL_MATCH_BASE)
+    ],
+    [
+        'url' => new moodle_url('/login/logout.php', ['sesskey' => $sesskey]),
+        'title' => get_string('logout'),
+        'icon' => 'fa-sign-out',
+        'key' => 'logout'
+    ]
+];
+
+// Add role switcher if user has capability
+if ($hasroles) {
+    $dashboardmenuitems[] = [
+        'url' => new moodle_url('/course/switchrole.php', [
+            'id' => $COURSE->id,
+            'sesskey' => $sesskey,
+            'switchrole' => -1,
+            'returnurl' => $PAGE->url->out_as_local_url(false)
+        ]),
+        'title' => get_string('switchroleto'),
+        'icon' => 'fa-user-secret',
+        'key' => 'switchrole'
+    ];
+}
+
+// Dashboard Cards configuration
 $dashboardcards = array();
+$enabledashboardcards = get_config('theme_compecer', 'enable_dashboard_cards');
 
-// Only process cards if the feature is enabled
-if (get_config('theme_compecer', 'enable_dashboard_cards')) {
+if ($enabledashboardcards) {
     for ($i = 1; $i <= 4; $i++) {
-        // Add card if it is marked as visible.
+        // Add card if it is marked as visible
         if (get_config('theme_compecer', "dashboard_card_{$i}_visibility")) {
             $dashboardcards[] = array(
-                'title'     => get_config('theme_compecer', "dashboard_card_{$i}_title"),
-                'subtitle'  => get_config('theme_compecer', "dashboard_card_{$i}_subtitle"),
-                'url'       => get_config('theme_compecer', "dashboard_card_{$i}_url"),
-                'color'     => get_config('theme_compecer', "dashboard_card_{$i}_color"),
+                'title' => get_config('theme_compecer', "dashboard_card_{$i}_title"),
+                'subtitle' => get_config('theme_compecer', "dashboard_card_{$i}_subtitle"),
+                'url' => get_config('theme_compecer', "dashboard_card_{$i}_url"),
+                'color' => get_config('theme_compecer', "dashboard_card_{$i}_color"),
                 'iconclass' => get_config('theme_compecer', "dashboard_card_{$i}_icon")
             );
         }
@@ -107,7 +201,7 @@ $templatecontext = [
     'output' => $OUTPUT,
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
-    'bodyattributes' => $bodyattributes,
+    'bodyattributes' => $OUTPUT->body_attributes($extraclasses),
     'courseindexopen' => $courseindexopen,
     'blockdraweropen' => $blockdraweropen,
     'courseindex' => $courseindex,
@@ -123,13 +217,18 @@ $templatecontext = [
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
     'enablecourseindex' => $themesettings->enablecourseindex,
+    // Dashboard specific data
+    'dashboardmenuitems' => $dashboardmenuitems,
+    'sesskey' => $sesskey,
+    'hasroles' => $hasroles,
+    'courseid' => $COURSE->id,
     // Dashboard cards data
     'dashboardcards' => $dashboardcards,
     'hasdashboardcards' => !empty($dashboardcards),
-    'enabledashboardcards' => get_config('theme_compecer', 'enable_dashboard_cards')
+    'enabledashboardcards' => $enabledashboardcards
 ];
 
-// Merge with theme settings.
+// Get any custom settings from the theme.
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
 
 // Render the template.
