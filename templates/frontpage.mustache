@@ -31,16 +31,8 @@
     <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container bg-white">
         {{#slidercount}}
         <!-- Slider Section -->
-        <section id="mooveslideshow" class="position-relative animate-section {{^hasanymobileimage}}d-none d-md-block{{/hasanymobileimage}}">
+        <section id="mooveslideshow" class="position-relative animate-section {{#isloggedin}}slider-logged-in{{/isloggedin}} {{^hasanymobileimage}}d-none d-md-block{{/hasanymobileimage}}">
             <div id="frontpage-carousel" class="carousel slide" data-ride="carousel">
-                {{^slidersingleslide}}
-                <ol class="carousel-indicators">
-                    {{#slides}}
-                    <li data-target="#frontpage-carousel" data-slide-to="{{{key}}}" {{#active}}class="active"{{/active}}></li>
-                    {{/slides}}
-                </ol>
-                {{/slidersingleslide}}
-
                 <div class="carousel-inner">
                     {{#slides}}
                     <div class="carousel-item {{#active}}active{{/active}}">
