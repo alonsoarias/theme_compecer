@@ -105,7 +105,6 @@ function theme_compecer_pluginfile($course, $cm, $context, $filearea, $args, $fo
 
     if ($context->contextlevel == CONTEXT_SYSTEM) {
         $validfileareas = [
-            'loginbg_image',
             'sliderimage1',
             'sliderimage2',
             'sliderimage3',
