@@ -81,6 +81,14 @@ $btn-border-radius:  4px;
 // $input-border-color: $border-color;
 // $input-focus-shadow: 0 0 5px rgba($primary-blue, 0.5);
 //
+
+// Variables locales del componente
+$course-index-border-width: 1px;
+$course-index-spacing: 1rem;
+$course-index-icon-size: 1.25rem;
+$primary-blue-hover: darken($primary-blue, 10%);
+$primary-blue-dark: darken($primary-blue, 15%);
+$footer-blue-dark: darken($footer-blue, 10%);
 // =====================================================================
 // Fin de scss/custom_variables.scss
 // =====================================================================
