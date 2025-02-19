@@ -47,8 +47,27 @@ require_once(__DIR__ . '/../util/theme_settings.php');
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
  *
+ * @package    theme_compecer
+ * @copyright  2024 IngeWeb https://www.ingeweb.co
  */
 class core_renderer extends \theme_moove\output\core_renderer {
+    
+    /**
+     * Cached theme config
+     * @var object
+     */
+    protected $themeConfig = null;
+
+    /**
+     * Get theme config with caching
+     * @return object
+     */
+    protected function get_theme_config() {
+        if ($this->themeConfig === null) {
+            $this->themeConfig = theme_config::load('compecer');
+        }
+        return $this->themeConfig;
+    }
 
     /**
      * Renders the login form.
@@ -61,25 +80,13 @@ class core_renderer extends \theme_moove\output\core_renderer {
 
         $context = $form->export_for_template($this);
 
-        $theme = theme_config::load('compecer');
-
         // Override because rendering is not supported in template yet.
         $context->cookieshelpiconformatted = $this->help_icon('cookiesenabled');
         $context->errorformatted = $this->error_text($context->error);
 
         $context->logourl = $this->get_logo();
-        $context->sitename = format_string($SITE->fullname, true, array('context' => \context_course::instance(SITEID)));
+        $context->sitename = format_string($SITE->fullname, true, ['context' => \context_course::instance(SITEID)]);
         $context->my_credit = get_string('credit', 'theme_compecer');
-
-        // Manejar la imagen de fondo o el color para la página de login
-        $loginbgimageurl = $theme->setting_file_url('loginbg_image', 'loginbg_image');
-        if (!empty($loginbgimageurl)) {
-            $context->loginbg_imageurl = $loginbgimageurl;
-            $context->loginbackground = "background-image: url('{$loginbgimageurl}'); background-size: cover;";
-        } else {
-            $loginbgcolor = $theme->settings->loginbg_color ?? '#b2cdea';
-            $context->loginbackground = "background-color: {$loginbgcolor};";
-        }
 
         if (file_exists(__DIR__ . "/../../templates/core/login-custom.mustache")) {
             return $this->render_from_template('core/login-custom', $context);
@@ -89,13 +96,73 @@ class core_renderer extends \theme_moove\output\core_renderer {
     }
 
     /**
-     * Get theme image URL.
+     * Returns full header.
      *
-     * @return string
+     * @return string HTML for header
      */
-    public function get_theme_img_url($img) {
-        $theme = theme_config::load('compecer');
-        return $theme->setting_file_url($img, $img);
+    public function full_header() {
+        global $CFG, $USER, $PAGE, $COURSE;
+
+        if ($USER->id != 2) {
+            $CFG->perfdebug = 0;
+        }
+
+        $theme = $this->get_theme_config();
+        
+        // Prepare template context
+        $header = new stdClass();
+        
+        // Initialize general notice content
+        $header->generalnotice = '';
+        
+        // Handle general notice display
+        if (!empty(trim($theme->settings->generalnotice))) {
+            $mode = $theme->settings->generalnoticemode;
+            
+            if ($mode === 'info') {
+                $header->generalnotice = '<div class="alert alert-info mt-4">' .
+                    '<strong><i class="fa fa-info-circle"></i></strong> ' . 
+                    $theme->settings->generalnotice . 
+                    '</div>';
+            } else if ($mode === 'danger') {
+                $header->generalnotice = '<div class="alert alert-danger mt-4">' .
+                    '<strong><i class="fa fa-warning"></i></strong> ' . 
+                    $theme->settings->generalnotice . 
+                    '</div>';
+            }
+        }
+
+        // Admin reminder for disabled notice
+        if (is_siteadmin() && 
+            (!empty($theme->settings->generalnoticemode) && 
+             $theme->settings->generalnoticemode === 'off')) {
+            $header->generalnotice = '<div class="alert mt-4">' .
+                '<a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer">' .
+                '<strong><i class="fa fa-edit"></i></strong> ' . 
+                get_string('generalnotice_create', 'theme_compecer') . 
+                '</a></div>';
+        }
+        
+        // Get course image if in course context
+        $header->courseimageurl = '';
+        if ($PAGE->course && $PAGE->course->id > 1) {
+            require_once($CFG->dirroot . '/theme/compecer/lib.php');
+            $header->courseimageurl = theme_compecer_get_course_image($PAGE->course);
+        }
+        
+        // Add context information
+        $header->contextheader = $this->context_header();
+        $header->pageheadingbutton = $this->page_heading_button();
+        $header->courseheader = $this->course_header();
+        
+        if ($this->page->navbar) {
+            $header->hasnavbar = true;
+            $header->navbar = $this->navbar();
+        }
+
+        $header->headeractions = $this->page->get_header_actions();
+        
+        return $this->render_from_template('theme_compecer/core/full_header', $header);
     }
 
     /**
@@ -107,15 +174,17 @@ class core_renderer extends \theme_moove\output\core_renderer {
         global $CFG, $USER;
 
         $output = parent::standard_footer_html();
+        $theme = $this->get_theme_config();
 
-        // Add chat widget if enabled
-        if (!empty($this->page->theme->settings->enable_chat)) {
+        // Add chat widget if enabled and user is logged in
+        if (!empty($this->page->theme->settings->enable_chat) && isloggedin()) {
             $output .= $this->add_chat_widget();
         }
 
-        // Add accessibility widget if enabled
-        if (!empty($this->page->theme->settings->accessibility_widget)) {
+        // Add accessibility widget only if enabled and user is logged in
+        if (isloggedin() && !empty($this->page->theme->settings->accessibility_widget)) {
             $output .= '<script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>';
+            debugging('Accessibility widget loaded for user ID: ' . $USER->id, DEBUG_DEVELOPER);
         }
 
         // Add copy paste prevention if enabled
@@ -124,82 +193,28 @@ class core_renderer extends \theme_moove\output\core_renderer {
         }
 
         // Check if about text should be hidden
-        if (!empty($theme->settings->hideabouttext)) {
-            $output .= '<style>section#top-footer { display: none !important; }</style>';
+        if (isset($this->page->theme->settings->hideabouttext) && 
+            $this->page->theme->settings->hideabouttext == 1) {
+            $output .= '<style>
+                body section#top-footer { 
+                    display: none !important; 
+                }
+            </style>';
         }
 
         return $output;
     }
 
-/**
- * Returns full header.
- *
- * @return string HTML for header
- */
-public function full_header() {
-    global $CFG, $USER, $PAGE, $COURSE;
-
-    if ($USER->id != 2) {
-        $CFG->perfdebug = 0;
+    /**
+     * Get theme image URL.
+     *
+     * @param string $img Image name
+     * @return string Image URL
+     */
+    public function get_theme_img_url($img) {
+        $theme = $this->get_theme_config();
+        return $theme->setting_file_url($img, $img);
     }
-
-    $theme = theme_config::load('compecer');
-    
-    // Preparar el contexto para la plantilla
-    $header = new stdClass();
-    
-    // Inicializar contenido del aviso general
-    $header->generalnotice = '';
-    
-    // Aviso general (notice)
-    if (!empty(trim($theme->settings->generalnotice))) {
-        $mode = $theme->settings->generalnoticemode;
-        // 'info' => alert-info, 'danger' => alert-danger, 'off' => sin aviso
-        if ($mode === 'info') {
-            $header->generalnotice = '<div class="alert alert-info mt-4">' .
-                '<strong><i class="fa fa-info-circle"></i></strong> ' . 
-                $theme->settings->generalnotice . 
-                '</div>';
-        } else if ($mode === 'danger') {
-            $header->generalnotice = '<div class="alert alert-danger mt-4">' .
-                '<strong><i class="fa fa-warning"></i></strong> ' . 
-                $theme->settings->generalnotice . 
-                '</div>';
-        }
-    }
-
-    // Recordatorio para admin, si el aviso está en modo 'off'
-    if (is_siteadmin() && 
-        (!empty($theme->settings->generalnoticemode) && 
-         $theme->settings->generalnoticemode === 'off')) {
-        $header->generalnotice = '<div class="alert mt-4">' .
-            '<a href="' . $CFG->wwwroot . '/admin/settings.php?section=themesettingcompecer#theme_compecer">' .
-            '<strong><i class="fa fa-edit"></i></strong> ' . 
-            get_string('generalnotice_create', 'theme_compecer') . 
-            '</a></div>';
-    }
-    
-    // Obtener imagen del curso
-    $header->courseimageurl = '';
-    if ($PAGE->course && $PAGE->course->id > 1) {
-        require_once($CFG->dirroot . '/theme/compecer/lib.php');
-        $header->courseimageurl = theme_compecer_get_course_image($PAGE->course);
-    }
-    
-    // Agregar información del contexto
-    $header->contextheader = $this->context_header();
-    $header->pageheadingbutton = $this->page_heading_button();
-    $header->courseheader = $this->course_header();
-    
-    if ($this->page->navbar) {
-        $header->hasnavbar = true;
-        $header->navbar = $this->navbar();
-    }
-
-    $header->headeractions = $this->page->get_header_actions();
-    
-    return $this->render_from_template('theme_compecer/core/full_header', $header);
-}
 
     /**
      * Adds chat widget if enabled.
@@ -208,31 +223,30 @@ public function full_header() {
      */
     protected function add_chat_widget() {
         global $USER;
-        if (!isloggedin() || empty($this->page->theme->settings->tawkto_embed_url)) {
+        
+        if (empty($this->page->theme->settings->tawkto_embed_url)) {
             return '';
         }
+
+        // Sanitize user data
+        $userData = [
+            'name' => clean_param($USER->firstname . " " . $USER->lastname, PARAM_TEXT),
+            'email' => clean_param($USER->email, PARAM_EMAIL),
+            'username' => clean_param($USER->username, PARAM_USERNAME),
+            'idnumber' => clean_param($USER->idnumber, PARAM_TEXT)
+        ];
 
         return "<!--Start of Chat Script-->
         <script type=\"text/javascript\">
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        Tawk_API.visitor = {
-            name  : '" . $USER->firstname . " " . $USER->lastname . "',
-            email : '" . $USER->email . "',
-            username : '" . $USER->username . "',
-            idnumber : '" . $USER->idnumber . "'
-        };
+        Tawk_API.visitor = " . json_encode($userData) . ";
         Tawk_API.onLoad = function(){
-            Tawk_API.setAttributes({
-                name  : '" . $USER->firstname . " " . $USER->lastname . "',
-                email : '" . $USER->email . "',
-                username : '" . $USER->username . "',
-                idnumber : '" . $USER->idnumber . "'
-            }, function(error){});
+            Tawk_API.setAttributes(" . json_encode($userData) . ", function(error){});
         };
         (function(){
             var s1=document.createElement(\"script\"),s0=document.getElementsByTagName(\"script\")[0];
             s1.async=true;
-            s1.src='" . $this->page->theme->settings->tawkto_embed_url . "';
+            s1.src='" . clean_param($this->page->theme->settings->tawkto_embed_url, PARAM_URL) . "';
             s1.charset='UTF-8';
             s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);
@@ -247,41 +261,33 @@ public function full_header() {
     protected function add_copy_paste_prevention() {
         global $USER, $PAGE, $COURSE;
 
-        // Get restricted roles from theme settings
-        $restricted_roles = $this->page->theme->settings->copypaste_roles;
-
-        // If no roles are restricted or settings is empty, return
-        if (empty($restricted_roles)) {
-            return;
-        }
-
-        // If user is site admin, no restrictions apply
-        if (is_siteadmin()) {
-            return;
-        }
-
         try {
-            // Get course context
-            $context = null;
+            // Get restricted roles from theme settings
+            $restricted_roles = $this->page->theme->settings->copypaste_roles;
 
-            // Check if we are in a course context
+            // Return if no roles are restricted or user is admin
+            if (empty($restricted_roles) || is_siteadmin()) {
+                return;
+            }
+
+            // Get appropriate context
+            $context = null;
             if (!empty($COURSE->id) && $COURSE->id > 1) {
                 $context = \context_course::instance($COURSE->id);
             } else if (!empty($PAGE->context)) {
-                // If not in a course, try to get context from page
                 $context = $PAGE->context;
             }
 
             if (!$context) {
-                return; // No valid context found
+                return;
             }
 
-            // Convert to array if it's a string
+            // Convert roles to array if needed
             if (!is_array($restricted_roles)) {
                 $restricted_roles = explode(',', $restricted_roles);
             }
 
-            // Check if user has any restricted role in this context
+            // Check user roles
             $has_restricted_role = false;
             $user_roles = get_user_roles($context, $USER->id);
 
@@ -292,11 +298,12 @@ public function full_header() {
                 }
             }
 
-            // Only apply restrictions if user has restricted role and is logged in
+            // Apply restrictions if needed
             if (isloggedin() && $has_restricted_role) {
                 $PAGE->requires->js_call_amd('theme_compecer/prevent_copy_paste', 'init');
             }
-        } catch (moodle_exception $e) {
+
+        } catch (\moodle_exception $e) {
             debugging('Error in copy/paste prevention: ' . $e->getMessage(), DEBUG_DEVELOPER);
             return;
         }
