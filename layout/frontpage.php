@@ -135,7 +135,6 @@ if (!empty($PAGE->theme->settings->enable_slider) && !empty($PAGE->theme->settin
 
     if (!empty($slides)) {
         $templatecontext['slides'] = $slides;
-        $templatecontext['slidersingleslide'] = (count($slides) === 1);
         $templatecontext['hasanymobileimage'] = $hasAnyMobileImage;
     } else {
         $templatecontext['slidercount'] = false;
