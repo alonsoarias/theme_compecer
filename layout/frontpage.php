@@ -1,6 +1,5 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -18,6 +17,10 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
+
+// Para ver los mensajes de debugging, asegúrate de tener activado el modo de depuración en config.php:
+// $CFG->debug = (E_ALL | E_STRICT);
+// $CFG->debugdisplay = 1;
 
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
@@ -41,20 +44,16 @@ if ($courseindexopen) {
 
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
-
 if (!$hasblocks) {
     $blockdraweropen = false;
 }
 
 $themesettings = new \theme_moove\util\settings();
-
 $courseindex = core_course_drawer();
 if (!$courseindex) {
     $courseindexopen = false;
 }
-
 $forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
-
 $secondarynavigation = false;
 $overflow = '';
 
@@ -77,72 +76,86 @@ $renderer = $PAGE->get_renderer('core');
 $primarymenu = $primary->export_for_template($renderer);
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
-
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
-// Template context
+// Depuración: mostrar el contenido completo de $PAGE->theme->settings.
+debugging("DEBUG: Contenido de \$PAGE->theme->settings:\n" . var_export($PAGE->theme->settings, true));
+
 $templatecontext = [
-    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
-    'output' => $OUTPUT,
-    'sidepreblocks' => $blockshtml,
-    'hasblocks' => $hasblocks,
-    'bodyattributes' => $OUTPUT->body_attributes($extraclasses),
-    'courseindexopen' => $courseindexopen,
-    'blockdraweropen' => $blockdraweropen,
-    'courseindex' => $courseindex,
-    'primarymoremenu' => $primarymenu['moremenu'],
-    'secondarymoremenu' => $secondarynavigation ?: false,
-    'mobileprimarynav' => $primarymenu['mobileprimarynav'],
-    'usermenu' => $primarymenu['user'],
-    'langmenu' => $primarymenu['lang'],
+    'sitename'             => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
+    'output'               => $OUTPUT,
+    'sidepreblocks'        => $blockshtml,
+    'hasblocks'            => $hasblocks,
+    'bodyattributes'       => $OUTPUT->body_attributes($extraclasses),
+    'courseindexopen'      => $courseindexopen,
+    'blockdraweropen'      => $blockdraweropen,
+    'courseindex'          => $courseindex,
+    'primarymoremenu'      => $primarymenu['moremenu'],
+    'secondarymoremenu'    => $secondarynavigation ?: false,
+    'mobileprimarynav'     => $primarymenu['mobileprimarynav'],
+    'usermenu'             => $primarymenu['user'],
+    'langmenu'             => $primarymenu['lang'],
     'forceblockdraweropen' => $forceblockdraweropen,
-    'regionmainsettingsmenu' => $regionmainsettingsmenu,
-    'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'overflow' => $overflow,
-    'headercontent' => $headercontent,
-    'addblockbutton' => $addblockbutton,
-    'isloggedin' => isloggedin()
+    'regionmainsettingsmenu'=> $regionmainsettingsmenu,
+    'hasregionmainsettingsmenu'=> !empty($regionmainsettingsmenu),
+    'overflow'             => $overflow,
+    'headercontent'        => $headercontent,
+    'addblockbutton'       => $addblockbutton,
+    'isloggedin'           => isloggedin()
 ];
 
-// Slider content
-if (!empty($PAGE->theme->settings->enable_slider) && !empty($PAGE->theme->settings->slidercount)) {
+/* --- Sección Slider --- */
+$sliderenabled = !empty($PAGE->theme->settings->enable_slider);
+// Usamos la nueva clave para evitar conflictos con el tema padre.
+$slidercount = !empty($PAGE->theme->settings->frontpage_slidercount) ? $PAGE->theme->settings->frontpage_slidercount : 1;
+debugging("DEBUG: enable_slider = " . var_export($PAGE->theme->settings->enable_slider, true));
+debugging("DEBUG: frontpage_slidercount (del settings) = " . var_export($PAGE->theme->settings->frontpage_slidercount, true));
+debugging("DEBUG: Usando slidercount = " . $slidercount);
+
+if ($sliderenabled && $slidercount) {
+    debugging("DEBUG: Sección Slider activada. slidercount = " . $slidercount);
     $templatecontext['slidercount'] = true;
     $slides = [];
     $validSlideCount = 0;
     $hasAnyMobileImage = false;
-
-    for ($i = 1; $i <= $PAGE->theme->settings->slidercount; $i++) {
-        $sliderimage = $PAGE->theme->setting_file_url("sliderimage{$i}", "sliderimage{$i}");
-        $sliderimagemobile = $PAGE->theme->setting_file_url("sliderimage{$i}_mobile", "sliderimage{$i}_mobile");
-
+    for ($i = 1; $i <= $slidercount; $i++) {
+        // Usamos las nuevas claves para obtener las imágenes.
+        $sliderimage = $PAGE->theme->setting_file_url("frontpage_sliderimage{$i}", "frontpage_sliderimage{$i}");
+        $sliderimagemobile = $PAGE->theme->setting_file_url("frontpage_sliderimage{$i}_mobile", "frontpage_sliderimage{$i}_mobile");
+        debugging("DEBUG: Iteración slider {$i} - sliderimage: " . ($sliderimage ? $sliderimage : "NO ENCONTRADA"));
+        debugging("DEBUG: Iteración slider {$i} - sliderimagemobile: " . ($sliderimagemobile ? $sliderimagemobile : "NO ENCONTRADA"));
         if ($sliderimage) {
             if ($sliderimagemobile) {
                 $hasAnyMobileImage = true;
             }
-            
             $slides[] = [
-                'key' => $validSlideCount,
-                'active' => ($validSlideCount === 0),
-                'image' => $sliderimage,
-                'mobile_image' => $sliderimagemobile,
-                'has_mobile' => !empty($sliderimagemobile)
+                'key'         => $validSlideCount,
+                'active'      => ($validSlideCount === 0),
+                'image'       => $sliderimage,
+                'mobile_image'=> $sliderimagemobile,
+                'has_mobile'  => !empty($sliderimagemobile)
             ];
-            
             $validSlideCount++;
         }
     }
-
+    debugging("DEBUG: Total de slides válidos encontrados: " . $validSlideCount);
     if (!empty($slides)) {
         $templatecontext['slides'] = $slides;
         $templatecontext['hasanymobileimage'] = $hasAnyMobileImage;
     } else {
         $templatecontext['slidercount'] = false;
+        debugging("DEBUG: No se encontraron slides válidos. Se desactiva la sección slider.");
     }
+} else {
+    debugging("DEBUG: Sección Slider NO activada. enable_slider = " 
+        . var_export($PAGE->theme->settings->enable_slider, true)
+        . " frontpage_slidercount = " . var_export($PAGE->theme->settings->frontpage_slidercount, true));
 }
 
-// About section
+/* --- Sección About --- */
 if (!empty($PAGE->theme->settings->enable_about)) {
+    debugging("DEBUG: Sección About activada.");
     $templatecontext['aboutsection'] = true;
     $templatecontext['abouttitle'] = !empty($PAGE->theme->settings->abouttitle) ?
         format_text($PAGE->theme->settings->abouttitle, FORMAT_HTML) : '';
@@ -150,64 +163,80 @@ if (!empty($PAGE->theme->settings->enable_about)) {
         format_text($PAGE->theme->settings->aboutcontent, FORMAT_HTML) : '';
 }
 
-// Career boxes section
+/* --- Sección Career Boxes --- */
 if (!empty($PAGE->theme->settings->enablecareerboxes)) {
+    debugging("DEBUG: Career Boxes activados.");
     $templatecontext['careerboxes'] = true;
     $templatecontext['careerboxesbgcolor'] = $PAGE->theme->settings->careerboxesbgcolor ?? '#365ba3';
-
     $boxcount = !empty($PAGE->theme->settings->careerboxcount) ? (int)$PAGE->theme->settings->careerboxcount : 3;
+    debugging("DEBUG: careerboxcount = " . $boxcount);
     $templatecontext['boxcount'] = $boxcount;
-
     $columnClass = 'col-md-4';
     $templatecontext['boxcolumnclass'] = $columnClass;
-
     $boxes = [];
     for ($i = 1; $i <= $boxcount; $i++) {
         if (!empty($PAGE->theme->settings->{"careerbox{$i}title"})) {
+            debugging("DEBUG: Career Box {$i} - Título: " . $PAGE->theme->settings->{"careerbox{$i}title"});
             $boxes[] = [
-                'icon' => $PAGE->theme->settings->{"careerbox{$i}icon"} ?? 'graduation-cap',
-                'title' => format_text($PAGE->theme->settings->{"careerbox{$i}title"} ?? '', FORMAT_HTML),
-                'content' => format_text($PAGE->theme->settings->{"careerbox{$i}content"} ?? '', FORMAT_HTML),
+                'icon'        => $PAGE->theme->settings->{"careerbox{$i}icon"} ?? 'graduation-cap',
+                'title'       => format_text($PAGE->theme->settings->{"careerbox{$i}title"} ?? '', FORMAT_HTML),
+                'content'     => format_text($PAGE->theme->settings->{"careerbox{$i}content"} ?? '', FORMAT_HTML),
                 'columnclass' => $columnClass,
-                'row_break' => ($i === 4)
+                'row_break'   => ($i === 4)
             ];
+        } else {
+            debugging("DEBUG: Career Box {$i} NO tiene título asignado; se omite.");
         }
     }
     $templatecontext['boxes'] = $boxes;
 }
 
-// Categories section
+/* --- Sección Search Categories --- */
 if (!empty($PAGE->theme->settings->enable_search_categories) && !empty($PAGE->theme->settings->selectedcategories)) {
+    debugging("DEBUG: Sección Search Categories activada.");
     $selectedcats = $PAGE->theme->settings->selectedcategories;
     if (!empty($selectedcats)) {
-        $selectedcats = explode(',', $selectedcats);
+        if (is_array($selectedcats)) {
+            debugging("DEBUG: selectedcategories es un array: " . var_export($selectedcats, true));
+            $selectedcatsArray = $selectedcats;
+        } else {
+            debugging("DEBUG: selectedcategories es una cadena: " . $selectedcats);
+            $selectedcatsArray = explode(',', $selectedcats);
+        }
         $categories = [];
-
-        foreach ($selectedcats as $catid) {
+        foreach ($selectedcatsArray as $catid) {
             $category = core_course_category::get($catid, IGNORE_MISSING);
             if ($category) {
                 $categories[] = [
-                    'id' => $category->id,
-                    'name' => format_text($category->get_formatted_name(), FORMAT_HTML),
+                    'id'          => $category->id,
+                    'name'        => format_text($category->get_formatted_name(), FORMAT_HTML),
                     'description' => format_text($category->description, FORMAT_HTML),
-                    'url' => new moodle_url('/course/index.php', ['categoryid' => $category->id])
+                    'url'         => new moodle_url('/course/index.php', ['categoryid' => $category->id])
                 ];
+            } else {
+                debugging("DEBUG: No se encontró categoría con id: " . $catid);
             }
         }
-
         if (!empty($categories)) {
             $templatecontext['hassearchcategories'] = true;
             $templatecontext['categories'] = $categories;
-            $templatecontext['searchsectiontitle'] = format_text($PAGE->theme->settings->searchsectiontitle ?? 
-                get_string('searchsectiontitledefault', 'theme_compecer'), FORMAT_HTML);
-            $templatecontext['searchsectiondesc'] = format_text($PAGE->theme->settings->searchsectiondesc ?? 
-                get_string('searchsectiondescdefault', 'theme_compecer'), FORMAT_HTML);
+            $templatecontext['searchsectiontitle'] = format_text(
+                $PAGE->theme->settings->searchsectiontitle ??
+                get_string('searchsectiontitledefault', 'theme_compecer'),
+                FORMAT_HTML
+            );
+            $templatecontext['searchsectiondesc'] = format_text(
+                $PAGE->theme->settings->searchsectiondesc ??
+                get_string('searchsectiondescdefault', 'theme_compecer'),
+                FORMAT_HTML
+            );
             $templatecontext['categoriesbgcolor'] = $PAGE->theme->settings->categoriesbgcolor ?? '#f8f9fa';
         }
     }
 }
 
-// Merge with theme settings
+// Merge con el footer del tema.
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
 
+// Renderizar la plantilla Mustache.
 echo $OUTPUT->render_from_template('theme_compecer/frontpage', $templatecontext);
