@@ -1,6 +1,5 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+ 
 /**
  * Theme functions.
  *
@@ -104,13 +104,14 @@ function theme_compecer_pluginfile($course, $cm, $context, $filearea, $args, $fo
     $theme = theme_config::load('compecer');
 
     if ($context->contextlevel == CONTEXT_SYSTEM) {
+        // Se actualizan las claves para slider, usando el prefijo "frontpage_".
         $validfileareas = [
-            'sliderimage1',
-            'sliderimage2',
-            'sliderimage3',
-            'sliderimage1_mobile',
-            'sliderimage2_mobile',
-            'sliderimage3_mobile',
+            'frontpage_sliderimage1',
+            'frontpage_sliderimage2',
+            'frontpage_sliderimage3',
+            'frontpage_sliderimage1_mobile',
+            'frontpage_sliderimage2_mobile',
+            'frontpage_sliderimage3_mobile',
             'topfooterimg'
         ];
         
