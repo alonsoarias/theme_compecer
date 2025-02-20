@@ -273,189 +273,204 @@ if ($ADMIN->fulltree) {
     $asettings->add_tab($page);
 
     /* =========================================================================
-       TAB 2: Frontpage Settings
-       ========================================================================= */
-    $page = new admin_settingpage('theme_compecer_frontpage', get_string('frontpagesettings', 'theme_compecer'));
+   TAB 2: Frontpage Settings
+   ========================================================================= */
+$page = new admin_settingpage('theme_compecer_frontpage', get_string('frontpagesettings', 'theme_compecer'));
 
-    // --- Slider ---
+/** SLIDER **/
+
+// Título para la sección del slider.
+$page->add(new admin_setting_heading(
+    'theme_compecer/sliderheading',
+    get_string('sliderheading', 'theme_compecer'),
+    ''
+));
+
+// Opción para habilitar el slider.
+$name = 'theme_compecer/enable_slider';
+$title = get_string('enable_slider', 'theme_compecer');
+$description = get_string('enable_sliderdesc', 'theme_compecer');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Opción para definir la cantidad de slides.
+// Se ha cambiado el nombre a "frontpage_slidercount" para evitar conflictos.
+$name = 'theme_compecer/frontpage_slidercount';
+$title = get_string('slidercount', 'theme_compecer');
+$description = get_string('slidercountdesc', 'theme_compecer');
+$choices = [1 => '1', 2 => '2', 3 => '3'];
+$default = 1;
+$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Sección para definir las imágenes de cada slide (1 a 3).
+for ($i = 1; $i <= 3; $i++) {
     $page->add(new admin_setting_heading(
-        'theme_compecer/sliderheading',
-        get_string('sliderheading', 'theme_compecer'),
+        "theme_compecer/frontpage_slider{$i}heading",
+        get_string('sliderheading', 'theme_compecer', $i),
         ''
     ));
 
-    $name = 'theme_compecer/enable_slider';
-    $title = get_string('enable_slider', 'theme_compecer');
-    $description = get_string('enable_sliderdesc', 'theme_compecer');
-    $default = 1;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+    // Imagen para Desktop.
+    $name = "theme_compecer/frontpage_sliderimage{$i}";
+    $title = get_string('sliderimage', 'theme_compecer', $i) . ' (Desktop)';
+    $description = get_string('sliderimagedesc', 'theme_compecer') . ' (Desktop)';
+    $opts = ['subdirs' => 0, 'accepted_types' => ['web_image']];
+    // La clave para guardar el archivo también se ha renombrado.
+    $setting = new admin_setting_configstoredfile($name, $title, $description, "frontpage_sliderimage{$i}", 0, $opts);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    $name = 'theme_compecer/slidercount';
-    $title = get_string('slidercount', 'theme_compecer');
-    $description = get_string('slidercountdesc', 'theme_compecer');
-    $choices = [1 => '1', 2 => '2', 3 => '3'];
-    $default = 1;
-    $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    // Imagen para Mobile.
+    $name = "theme_compecer/frontpage_sliderimage{$i}_mobile";
+    $title = get_string('sliderimage', 'theme_compecer', $i) . ' (Mobile)';
+    $description = get_string('sliderimagedesc', 'theme_compecer') . ' (Mobile)';
+    $setting = new admin_setting_configstoredfile($name, $title, $description, "frontpage_sliderimage{$i}_mobile", 0, $opts);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
+}
 
-    for ($i = 1; $i <= 3; $i++) {
-        $page->add(new admin_setting_heading(
-            "theme_compecer/slider{$i}heading",
-            get_string('sliderheading', 'theme_compecer', $i),
-            ''
-        ));
+/** CAREER BOXES **/
 
-        $name = "theme_compecer/sliderimage{$i}";
-        $title = get_string('sliderimage', 'theme_compecer', $i) . ' (Desktop)';
-        $description = get_string('sliderimagedesc', 'theme_compecer') . ' (Desktop)';
-        $opts = ['subdirs' => 0, 'accepted_types' => ['web_image']];
-        $setting = new admin_setting_configstoredfile($name, $title, $description, "sliderimage{$i}", 0, $opts);
-        $page->add($setting);
+$page->add(new admin_setting_heading(
+    'theme_compecer/careerboxesheading',
+    get_string('careerboxesheading', 'theme_compecer'),
+    ''
+));
 
-        $name = "theme_compecer/sliderimage{$i}_mobile";
-        $title = get_string('sliderimage', 'theme_compecer', $i) . ' (Mobile)';
-        $description = get_string('sliderimagedesc', 'theme_compecer') . ' (Mobile)';
-        $setting = new admin_setting_configstoredfile($name, $title, $description, "sliderimage{$i}_mobile", 0, $opts);
-        $page->add($setting);
-    }
+$name = 'theme_compecer/enablecareerboxes';
+$title = get_string('enablecareerboxes', 'theme_compecer');
+$description = get_string('enablecareerboxesdesc', 'theme_compecer');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$page->add($setting);
 
-    // --- Career Boxes ---
+$name = 'theme_compecer/careerboxcount';
+$title = get_string('careerboxcount', 'theme_compecer');
+$description = get_string('careerboxcountdesc', 'theme_compecer');
+$choices = [1 => '1', 2 => '2', 3 => '3', 4 => '4', 5 => '5', 6 => '6'];
+$default = 3;
+$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+$page->add($setting);
+
+$name = 'theme_compecer/careerboxesbgcolor';
+$title = get_string('careerboxesbgcolor', 'theme_compecer');
+$description = get_string('careerboxesbgcolordesc', 'theme_compecer');
+$default = '#365ba3';
+$setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+$maxboxes = 6;
+for ($i = 1; $i <= $maxboxes; $i++) {
     $page->add(new admin_setting_heading(
-        'theme_compecer/careerboxesheading',
-        get_string('careerboxesheading', 'theme_compecer'),
+        "theme_compecer/careerbox{$i}heading",
+        get_string('careerboxheading', 'theme_compecer', $i),
         ''
     ));
 
-    $name = 'theme_compecer/enablecareerboxes';
-    $title = get_string('enablecareerboxes', 'theme_compecer');
-    $description = get_string('enablecareerboxesdesc', 'theme_compecer');
-    $default = 1;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+    $name = "theme_compecer/careerbox{$i}icon";
+    $title = get_string('careerboxicon', 'theme_compecer', $i);
+    $description = get_string('careerboxicondesc', 'theme_compecer');
+    $default = 'graduation-cap';
+    $setting = new admin_setting_configselect($name, $title, $description, $default, $icons);
     $page->add($setting);
 
-    $name = 'theme_compecer/careerboxcount';
-    $title = get_string('careerboxcount', 'theme_compecer');
-    $description = get_string('careerboxcountdesc', 'theme_compecer');
-    $choices = [1 => '1', 2 => '2', 3 => '3', 4 => '4', 5 => '5', 6 => '6'];
-    $default = 3;
-    $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $page->add($setting);
-
-    $name = 'theme_compecer/careerboxesbgcolor';
-    $title = get_string('careerboxesbgcolor', 'theme_compecer');
-    $description = get_string('careerboxesbgcolordesc', 'theme_compecer');
-    $default = '#365ba3';
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    $maxboxes = 6;
-    for ($i = 1; $i <= $maxboxes; $i++) {
-        $page->add(new admin_setting_heading(
-            "theme_compecer/careerbox{$i}heading",
-            get_string('careerboxheading', 'theme_compecer', $i),
-            ''
-        ));
-
-        $name = "theme_compecer/careerbox{$i}icon";
-        $title = get_string('careerboxicon', 'theme_compecer', $i);
-        $description = get_string('careerboxicondesc', 'theme_compecer');
-        $default = 'graduation-cap';
-        $setting = new admin_setting_configselect($name, $title, $description, $default, $icons);
-        $page->add($setting);
-
-        $name = "theme_compecer/careerbox{$i}title";
-        $title = get_string('careerboxtitle', 'theme_compecer', $i);
-        $description = get_string('careerboxtitledesc', 'theme_compecer');
-        $default = get_string('careerboxtitledefault', 'theme_compecer', $i);
-        $setting = new admin_setting_configtext($name, $title, $description, $default);
-        $page->add($setting);
-
-        $name = "theme_compecer/careerbox{$i}content";
-        $title = get_string('careerboxcontent', 'theme_compecer', $i);
-        $description = get_string('careerboxcontentdesc', 'theme_compecer');
-        $default = get_string('careerboxcontentdefault', 'theme_compecer', $i);
-        $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
-        $page->add($setting);
-    }
-
-    // --- Search Categories ---
-    $page->add(new admin_setting_heading(
-        'theme_compecer/searchcategoriesheading',
-        get_string('searchcategoriesheading', 'theme_compecer'),
-        ''
-    ));
-
-    $name = 'theme_compecer/enable_search_categories';
-    $title = get_string('enable_search_categories', 'theme_compecer');
-    $description = get_string('enable_search_categoriesdesc', 'theme_compecer');
-    $default = 1;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    $name = 'theme_compecer/selectedcategories';
-    $title = get_string('selectedcategories', 'theme_compecer');
-    $description = get_string('selectedcategoriesdesc', 'theme_compecer');
-    $categories = core_course_category::make_categories_list();
-    $default = [];
-    $setting = new admin_setting_configmultiselect($name, $title, $description, $default, $categories);
-    $page->add($setting);
-
-    $name = 'theme_compecer/searchsectiontitle';
-    $title = get_string('searchsectiontitle', 'theme_compecer');
-    $description = get_string('searchsectiontitledesc', 'theme_compecer');
-    $default = get_string('searchsectiontitledefault', 'theme_compecer');
+    $name = "theme_compecer/careerbox{$i}title";
+    $title = get_string('careerboxtitle', 'theme_compecer', $i);
+    $description = get_string('careerboxtitledesc', 'theme_compecer');
+    $default = get_string('careerboxtitledefault', 'theme_compecer', $i);
     $setting = new admin_setting_configtext($name, $title, $description, $default);
     $page->add($setting);
 
-    $name = 'theme_compecer/searchsectiondesc';
-    $title = get_string('searchsectiondesc', 'theme_compecer');
-    $description = get_string('searchsectiondescdesc', 'theme_compecer');
-    $default = get_string('searchsectiondescdefault', 'theme_compecer');
+    $name = "theme_compecer/careerbox{$i}content";
+    $title = get_string('careerboxcontent', 'theme_compecer', $i);
+    $description = get_string('careerboxcontentdesc', 'theme_compecer');
+    $default = get_string('careerboxcontentdefault', 'theme_compecer', $i);
     $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
     $page->add($setting);
+}
 
-    $name = 'theme_compecer/categoriesbgcolor';
-    $title = get_string('categoriesbgcolor', 'theme_compecer');
-    $description = get_string('categoriesbgcolordesc', 'theme_compecer');
-    $default = '#f8f9fa';
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+/** SEARCH CATEGORIES **/
 
-    // --- About Frontpage ---
-    $page->add(new admin_setting_heading(
-        'theme_compecer/aboutfrontpageheading',
-        get_string('aboutfrontpageheading', 'theme_compecer'),
-        ''
-    ));
+$page->add(new admin_setting_heading(
+    'theme_compecer/searchcategoriesheading',
+    get_string('searchcategoriesheading', 'theme_compecer'),
+    ''
+));
 
-    $name = 'theme_compecer/enable_about';
-    $title = get_string('enable_about', 'theme_compecer');
-    $description = get_string('enable_aboutdesc', 'theme_compecer');
-    $default = 1;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+$name = 'theme_compecer/enable_search_categories';
+$title = get_string('enable_search_categories', 'theme_compecer');
+$description = get_string('enable_search_categoriesdesc', 'theme_compecer');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
 
-    $name = 'theme_compecer/abouttitle';
-    $title = get_string('abouttitle', 'theme_compecer');
-    $description = get_string('abouttitledesc', 'theme_compecer');
-    $default = get_string('abouttitledefault', 'theme_compecer');
-    $setting = new admin_setting_configtext($name, $title, $description, $default);
-    $page->add($setting);
+$name = 'theme_compecer/selectedcategories';
+$title = get_string('selectedcategories', 'theme_compecer');
+$description = get_string('selectedcategoriesdesc', 'theme_compecer');
+$categories = core_course_category::make_categories_list();
+$default = [];
+$setting = new admin_setting_configmultiselect($name, $title, $description, $default, $categories);
+$page->add($setting);
 
-    $name = 'theme_compecer/aboutcontent';
-    $title = get_string('aboutcontent', 'theme_compecer');
-    $description = get_string('aboutcontentdesc', 'theme_compecer');
-    $default = get_string('aboutcontentdefault', 'theme_compecer');
-    $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
-    $page->add($setting);
+$name = 'theme_compecer/searchsectiontitle';
+$title = get_string('searchsectiontitle', 'theme_compecer');
+$description = get_string('searchsectiontitledesc', 'theme_compecer');
+$default = get_string('searchsectiontitledefault', 'theme_compecer');
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$page->add($setting);
 
-    $asettings->add_tab($page);
+$name = 'theme_compecer/searchsectiondesc';
+$title = get_string('searchsectiondesc', 'theme_compecer');
+$description = get_string('searchsectiondescdesc', 'theme_compecer');
+$default = get_string('searchsectiondescdefault', 'theme_compecer');
+$setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+$page->add($setting);
+
+$name = 'theme_compecer/categoriesbgcolor';
+$title = get_string('categoriesbgcolor', 'theme_compecer');
+$description = get_string('categoriesbgcolordesc', 'theme_compecer');
+$default = '#f8f9fa';
+$setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+/** ABOUT FRONTPAGE **/
+
+$page->add(new admin_setting_heading(
+    'theme_compecer/aboutfrontpageheading',
+    get_string('aboutfrontpageheading', 'theme_compecer'),
+    ''
+));
+
+$name = 'theme_compecer/enable_about';
+$title = get_string('enable_about', 'theme_compecer');
+$description = get_string('enable_aboutdesc', 'theme_compecer');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+$name = 'theme_compecer/abouttitle';
+$title = get_string('abouttitle', 'theme_compecer');
+$description = get_string('abouttitledesc', 'theme_compecer');
+$default = get_string('abouttitledefault', 'theme_compecer');
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$page->add($setting);
+
+$name = 'theme_compecer/aboutcontent';
+$title = get_string('aboutcontent', 'theme_compecer');
+$description = get_string('aboutcontentdesc', 'theme_compecer');
+$default = get_string('aboutcontentdefault', 'theme_compecer');
+$setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+$page->add($setting);
+
+$asettings->add_tab($page);
 
     /* =========================================================================
        TAB 3: MyDashboard Settings
