@@ -183,7 +183,16 @@
 </html>
 
 {{#js}}
-require(['jquery', 'theme_boost/bootstrap/carousel'], function($) {
+require(['jquery', 'theme_boost/bootstrap/carousel', 'theme_boost/bootstrap/dropdown', 'theme_boost/drawer'], function($, Carousel, Dropdown, Drawer) {
+    // Inicializar los drawers
+    Drawer.init();
+    
+    // Asegurarnos que los dropdowns funcionen correctamente
+    $(document).ready(function() {
+        // Inicializar explícitamente los dropdowns del menú de usuario
+        $('[data-toggle="dropdown"]').dropdown();
+    });
+    
     // Inicialización del carrusel
     function initializeCarousel() {
         var $carousel = $('#frontpage-carousel');
