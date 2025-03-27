@@ -18,9 +18,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
-// Para ver los mensajes de debugging, asegúrate de tener activado el modo de depuración en config.php:
-// $CFG->debug = (E_ALL | E_STRICT);
-// $CFG->debugdisplay = 1;
+// Se removieron los mensajes de debugging que causaban problemas
 
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
@@ -79,8 +77,7 @@ $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settin
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
-// Depuración: mostrar el contenido completo de $PAGE->theme->settings.
-debugging("DEBUG: Contenido de \$PAGE->theme->settings:\n" . var_export($PAGE->theme->settings, true));
+// Eliminado el código de depuración que podría causar problemas
 
 $templatecontext = [
     'sitename'             => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
@@ -107,24 +104,17 @@ $templatecontext = [
 
 /* --- Sección Slider --- */
 $sliderenabled = !empty($PAGE->theme->settings->enable_slider);
-// Usamos la nueva clave para evitar conflictos con el tema padre.
 $slidercount = !empty($PAGE->theme->settings->frontpage_slidercount) ? $PAGE->theme->settings->frontpage_slidercount : 1;
-debugging("DEBUG: enable_slider = " . var_export($PAGE->theme->settings->enable_slider, true));
-debugging("DEBUG: frontpage_slidercount (del settings) = " . var_export($PAGE->theme->settings->frontpage_slidercount, true));
-debugging("DEBUG: Usando slidercount = " . $slidercount);
 
 if ($sliderenabled && $slidercount) {
-    debugging("DEBUG: Sección Slider activada. slidercount = " . $slidercount);
     $templatecontext['slidercount'] = true;
     $slides = [];
     $validSlideCount = 0;
     $hasAnyMobileImage = false;
     for ($i = 1; $i <= $slidercount; $i++) {
-        // Usamos las nuevas claves para obtener las imágenes.
         $sliderimage = $PAGE->theme->setting_file_url("frontpage_sliderimage{$i}", "frontpage_sliderimage{$i}");
         $sliderimagemobile = $PAGE->theme->setting_file_url("frontpage_sliderimage{$i}_mobile", "frontpage_sliderimage{$i}_mobile");
-        debugging("DEBUG: Iteración slider {$i} - sliderimage: " . ($sliderimage ? $sliderimage : "NO ENCONTRADA"));
-        debugging("DEBUG: Iteración slider {$i} - sliderimagemobile: " . ($sliderimagemobile ? $sliderimagemobile : "NO ENCONTRADA"));
+        
         if ($sliderimage) {
             if ($sliderimagemobile) {
                 $hasAnyMobileImage = true;
@@ -139,23 +129,17 @@ if ($sliderenabled && $slidercount) {
             $validSlideCount++;
         }
     }
-    debugging("DEBUG: Total de slides válidos encontrados: " . $validSlideCount);
+    
     if (!empty($slides)) {
         $templatecontext['slides'] = $slides;
         $templatecontext['hasanymobileimage'] = $hasAnyMobileImage;
     } else {
         $templatecontext['slidercount'] = false;
-        debugging("DEBUG: No se encontraron slides válidos. Se desactiva la sección slider.");
     }
-} else {
-    debugging("DEBUG: Sección Slider NO activada. enable_slider = " 
-        . var_export($PAGE->theme->settings->enable_slider, true)
-        . " frontpage_slidercount = " . var_export($PAGE->theme->settings->frontpage_slidercount, true));
 }
 
 /* --- Sección About --- */
 if (!empty($PAGE->theme->settings->enable_about)) {
-    debugging("DEBUG: Sección About activada.");
     $templatecontext['aboutsection'] = true;
     $templatecontext['abouttitle'] = !empty($PAGE->theme->settings->abouttitle) ?
         format_text($PAGE->theme->settings->abouttitle, FORMAT_HTML) : '';
@@ -165,18 +149,15 @@ if (!empty($PAGE->theme->settings->enable_about)) {
 
 /* --- Sección Career Boxes --- */
 if (!empty($PAGE->theme->settings->enablecareerboxes)) {
-    debugging("DEBUG: Career Boxes activados.");
     $templatecontext['careerboxes'] = true;
     $templatecontext['careerboxesbgcolor'] = $PAGE->theme->settings->careerboxesbgcolor ?? '#365ba3';
     $boxcount = !empty($PAGE->theme->settings->careerboxcount) ? (int)$PAGE->theme->settings->careerboxcount : 3;
-    debugging("DEBUG: careerboxcount = " . $boxcount);
     $templatecontext['boxcount'] = $boxcount;
     $columnClass = 'col-md-4';
     $templatecontext['boxcolumnclass'] = $columnClass;
     $boxes = [];
     for ($i = 1; $i <= $boxcount; $i++) {
         if (!empty($PAGE->theme->settings->{"careerbox{$i}title"})) {
-            debugging("DEBUG: Career Box {$i} - Título: " . $PAGE->theme->settings->{"careerbox{$i}title"});
             $boxes[] = [
                 'icon'        => $PAGE->theme->settings->{"careerbox{$i}icon"} ?? 'graduation-cap',
                 'title'       => format_text($PAGE->theme->settings->{"careerbox{$i}title"} ?? '', FORMAT_HTML),
@@ -184,8 +165,6 @@ if (!empty($PAGE->theme->settings->enablecareerboxes)) {
                 'columnclass' => $columnClass,
                 'row_break'   => ($i === 4)
             ];
-        } else {
-            debugging("DEBUG: Career Box {$i} NO tiene título asignado; se omite.");
         }
     }
     $templatecontext['boxes'] = $boxes;
@@ -193,14 +172,11 @@ if (!empty($PAGE->theme->settings->enablecareerboxes)) {
 
 /* --- Sección Search Categories --- */
 if (!empty($PAGE->theme->settings->enable_search_categories) && !empty($PAGE->theme->settings->selectedcategories)) {
-    debugging("DEBUG: Sección Search Categories activada.");
     $selectedcats = $PAGE->theme->settings->selectedcategories;
     if (!empty($selectedcats)) {
         if (is_array($selectedcats)) {
-            debugging("DEBUG: selectedcategories es un array: " . var_export($selectedcats, true));
             $selectedcatsArray = $selectedcats;
         } else {
-            debugging("DEBUG: selectedcategories es una cadena: " . $selectedcats);
             $selectedcatsArray = explode(',', $selectedcats);
         }
         $categories = [];
@@ -213,8 +189,6 @@ if (!empty($PAGE->theme->settings->enable_search_categories) && !empty($PAGE->th
                     'description' => format_text($category->description, FORMAT_HTML),
                     'url'         => new moodle_url('/course/index.php', ['categoryid' => $category->id])
                 ];
-            } else {
-                debugging("DEBUG: No se encontró categoría con id: " . $catid);
             }
         }
         if (!empty($categories)) {
